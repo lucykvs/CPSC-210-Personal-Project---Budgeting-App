@@ -20,7 +20,7 @@ This app will be useful for:
 - friends sharing costs of meals or gas
 
 
-## User Stories:
+#### User Stories:
 - As a user, I want to be able to add costs to a list of my expenses
 - I want to be able to add one or multiple source(s) of income to balance my budget
 - I want to be able to create multiple lists of expenses for different people (e.g. for roommates in a house)
