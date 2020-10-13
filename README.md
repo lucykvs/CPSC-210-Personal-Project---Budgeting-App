@@ -15,5 +15,13 @@ and easily edited to maintain a higher level of financial organization.
 
 This app will be useful for: 
 - students and professionals organizing their own personal budget
+- small business owners aiming to keep track of startup costs
 - roommates splitting costs of recurring expenses and purchases
 - friends sharing costs of meals or gas
+
+
+## User Stories:
+- As a user, I want to be able to add costs to a list of my expenses
+- I want to be able to add one or multiple source(s) of income to balance my budget
+- I want to be able to create multiple lists of expenses for different people (e.g. for roommates in a house)
+- I want to be able to hide my budget from other users on the same computer, and return to the budget later using a PIN
