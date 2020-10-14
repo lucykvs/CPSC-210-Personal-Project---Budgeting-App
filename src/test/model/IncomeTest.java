@@ -1,6 +1,5 @@
-package test.model;
+package model;
 
-import main.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,10 +8,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class IncomeTest {
-//
+
 //    private Income myIncome;
 //
-//    @BeforeEach
+//   @BeforeEach
 //    public void setUp() {
 //        Income myIncome = new Income();  //empty collection
 //    }

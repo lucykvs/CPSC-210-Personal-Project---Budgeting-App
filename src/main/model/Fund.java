@@ -1,4 +1,4 @@
-package main.model;
+package model;
 
 // Represents a source of income having a brief description and total amount in dollars
 public class Fund {

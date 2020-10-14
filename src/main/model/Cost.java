@@ -1,4 +1,4 @@
-package main.model;
+package model;
 
 // Represents a costs having a brief description and total amount in dollars
 public class Cost {

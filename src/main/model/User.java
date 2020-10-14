@@ -2,7 +2,7 @@
 
 
 
-//package main.model;
+//package model;
 //
 //import main.ui.Budget;
 //

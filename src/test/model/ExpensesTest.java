@@ -1,6 +1,5 @@
-package test.model;
+package model;
 
-import main.model.Expenses;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

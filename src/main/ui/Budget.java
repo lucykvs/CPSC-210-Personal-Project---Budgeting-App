@@ -1,7 +1,7 @@
-package main.ui;
+package ui;
 
-import main.model.Expenses;
-import main.model.Income;
+import model.Expenses;
+import model.Income;
 
 import java.util.List;
 import java.util.Scanner;
