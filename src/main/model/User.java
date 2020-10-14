@@ -1,17 +1,19 @@
 package main.model;
 
-// Represents an account having an owner name, id, list of expenses, list of costs, and budget balance
-public class Account {
+import main.ui.Budget;
+
+// Represents a user having a username, id, and a budget
+public class User {
     private static int nextAccountId = 0;  //tracks id of next account created
     private String name;                   //username of account user
     private int id;                        //account id
-    private double expenses;               //list of expenses
-    private double income;                 //list of incomes
-    private double budgetBal;              //balance of budget; income - expenses
+    private Budget budget;
 
-    public Account(String userName, int id) {
+    // Constructs a user with given username, an id number, and an empty budget
+    public User(String username) {
         id = nextAccountId++;
-        name = userName;
+        budget = new Budget(username);
+        name = username;
     }
 
     public String getName() {
@@ -23,11 +25,11 @@ public class Account {
     }
 
     public double getExpenses() {
-        return 0; //stub - return total value of expenses
+        return 0; //stub - return list of expenses
     }
 
     public double getIncome() {
-        return 0; //stub - return total value of income
+        return 0; //stub - return list of incomes
     }
 
     public double getBalance() {

@@ -1,23 +1,46 @@
 package main.model;
 
-// Represents an income having a brief description and total amount in dollars
+import java.util.ArrayList;
+import java.util.List;
+
 public class Income {
-    private String description;
-    private double amount;
+    private List<Fund> income;
 
-    // EFFECTS: constructs an income with an associated description and amount
-    public Income(String description, double amount) {
-        this.description = description;
-        this.amount = amount;
+    // EFFECTS: constructs an empty collection of incomes
+    public Income() {
+        income = new ArrayList<>();
     }
 
-    // EFFECTS: returns description of this income
-    public String getDescription() {
-        return description;
+    // REQUIRES: amount >= 0
+    // MODIFIES: this
+    // EFFECTS: adds a new income to the collection of incomes to be counted
+    public void addFund(String description, double amount) {
+        Fund f = new Fund(description, amount);
+        income.add(f);
     }
 
-    // EFFECTS: returns amount in dollars of this income
-    public double getAmount() {
-        return amount;
+    // MODIFIES: this
+    // EFFECTS: returns list of the descriptions of those incomes in list of incomes;
+    // list returned can be empty.
+    public List<String> getAllFundDescriptions() {
+        List<String> descriptions = new ArrayList<>();
+        for (Fund f : income) {
+            descriptions.add(f.getDescription());
+        }
+        return descriptions;
     }
+
+    // MODIFIES: this
+    // EFFECTS: returns total amount in dollars of all income amounts in list of incomes
+    public double getTotalIncome() {
+        double total = 0;
+        for (Fund f : income) {
+            total += f.getAmount();
+        }
+
+        return total;
+    }
+
+
+
 }
