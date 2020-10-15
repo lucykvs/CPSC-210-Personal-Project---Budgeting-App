@@ -24,5 +24,5 @@ This app will be useful for:
 - As a user, I want to be able to add costs to a list of my expenses
 - I want to be able to add one or multiple source(s) of income to a list of my incomes
 - I want to be able to see the total of my expenses and income, and the balance of these totals
-- I want to be able to create multiple lists of expenses under different usernames (e.g. for roommates in a house)
+- I want to be able to see the total of my expenses and income, and the balance of these totals
 
