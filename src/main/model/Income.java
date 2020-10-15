@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+// Represents a collection of funds comprising a budget's incomes
 public class Income {
     private List<Fund> income;
 
@@ -24,6 +25,7 @@ public class Income {
     // list returned can be empty.
     public List<String> getAllFundDescriptions() {
         List<String> descriptions = new ArrayList<>();
+
         for (Fund f : income) {
             descriptions.add(f.getDescription());
         }
@@ -34,13 +36,10 @@ public class Income {
     // EFFECTS: returns total amount in dollars of all income amounts in list of incomes
     public double getTotalIncome() {
         double total = 0;
+
         for (Fund f : income) {
             total += f.getAmount();
         }
-
         return total;
     }
-
-
-
 }

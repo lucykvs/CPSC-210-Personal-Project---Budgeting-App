@@ -40,26 +40,11 @@ public class BudgetApp {
                 processCommand(command);
             }
         }
-
         System.out.println("\nBye for now!");
     }
 
     // MODIFIES: this
-    // EFFECTS: processes user command
-    private void processCommand(String command) {
-        if (command.equals("c")) {
-            addCost();
-        } else if (command.equals("i")) {
-            addFund();
-        } else if (command.equals("v")) {
-            viewDetails();
-        } else {
-            System.out.println("Selection not valid...");
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: initializes accounts
+    // EFFECTS: prompts user for username and sets this user's name
     private void init() {
         input = new Scanner(System.in);
         System.out.print("Enter your username: ");
@@ -78,7 +63,21 @@ public class BudgetApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: adds a cost to list of expenses
+    // EFFECTS: processes user command from first menu
+    private void processCommand(String command) {
+        if (command.equals("c")) {
+            addCost();
+        } else if (command.equals("i")) {
+            addFund();
+        } else if (command.equals("v")) {
+            viewDetails();
+        } else {
+            System.out.println("Selection not valid...");
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: adds a cost to user's list of expenses
     public void addCost() {
         System.out.print("Enter cost description: ");
         String description = input.next();
@@ -93,7 +92,7 @@ public class BudgetApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: adds a fund to list of incomes
+    // EFFECTS: adds a fund to user's list of incomes
     public void addFund() {
         System.out.print("Enter income description: ");
         String description = input.next();               // as of now, will only work with one-word input
@@ -107,7 +106,7 @@ public class BudgetApp {
         }
     }
 
-    // EFFECTS: prompts user to select expenses, income, or budget balance and returns total of category
+    // EFFECTS: prompts user to enter 'totals', 'balance', 'expenses', 'or income' to view details of their budget
     public void viewDetails() {
         String selection = "";  // force entry into loop
 
@@ -123,6 +122,7 @@ public class BudgetApp {
         }
     }
 
+    // EFFECTS: prints income and expense totals, budget balance, or list of expense or income descriptions
     public void printDetails(String selection) {
         if (selection.equals("totals")) {
             System.out.println("Your total income is: $" + user.getBudget().getIncome().getTotalIncome());
@@ -140,6 +140,7 @@ public class BudgetApp {
         }
     }
 
+    // EFFECTS: prints descriptions from given list of descriptions in a numbered list
     private void printAllDescriptions(List<String> allDescriptions) {
         int i = 1;
 

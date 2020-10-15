@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+// Represents a collection of costs comprising a budget's expenses
 public class Expenses {
     private List<Cost> costs;
 
@@ -13,7 +14,7 @@ public class Expenses {
 
     // REQUIRES: amount >= 0
     // MODIFIES: this
-    // EFFECTS: adds a new cost to the collection of expenses to be counted
+    // EFFECTS: adds a new cost to the collection of expenses
     public void addCost(String description, double amount) {
         Cost c = new Cost(description, amount);
         costs.add(c);
@@ -24,6 +25,7 @@ public class Expenses {
     // list returned can be empty.
     public List<String> getAllCostDescriptions() {
         List<String> descriptions = new ArrayList<>();
+
         for (Cost c : costs) {
             descriptions.add(c.getDescription());
         }
@@ -37,10 +39,6 @@ public class Expenses {
         for (Cost c : costs) {
             total += c.getAmount();
         }
-
         return total;
     }
-
-
-
 }
