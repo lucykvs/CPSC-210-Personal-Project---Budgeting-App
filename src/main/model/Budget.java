@@ -1,8 +1,5 @@
 package model;
 
-import model.Expenses;
-import model.Income;
-
 // Represents a budget with a list of expenses, list of incomes, and a username
 public class Budget {
     public Income income;
