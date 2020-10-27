@@ -47,7 +47,7 @@ public class BudgetApp {
     private void init() {
         input = new Scanner(System.in);
         System.out.print("Enter your username: ");
-        String username = input.next();
+        String username = (input.next() + input.nextLine());
         user = new User(username);
     }
 
@@ -79,7 +79,7 @@ public class BudgetApp {
     // EFFECTS: adds a cost to user's list of expenses
     public void addCost() {
         System.out.print("Enter cost description: ");
-        String description = input.next();
+        String description = (input.next() + input.nextLine());
         System.out.print("Enter amount of cost: $");
         double amount = input.nextDouble();
 
@@ -94,7 +94,7 @@ public class BudgetApp {
     // EFFECTS: adds a fund to user's list of incomes
     public void addFund() {
         System.out.print("Enter income description: ");
-        String description = input.next();               // as of now, will only work with one-word input
+        String description = (input.next() + input.nextLine());
         System.out.print("Enter amount of income: $");
         double amount = input.nextDouble();
 

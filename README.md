@@ -20,10 +20,15 @@ This app will be useful for:
 - friends sharing costs of meals or gas
 
 
-#### User Stories:
+#### User Stories, Phase 1:
 - As a user, I want to be able to add costs to a list of my expenses
 - I want to be able to add one or multiple source(s) of income to a list of my incomes
 - I want to be able to see the total of my expenses and income, and the balance of these totals
 - I want to be able to see the description of my income sources in one list and my expenses in another
 
 
+#### User Stories, Phase 2: 
+- As a user, I want to be able to save my budget to a file
+- As a user, I want to be able to reload my budget from a file in the future using my username
+- As a user, when I select the quit option from the app menu, I want to be reminded to save my budget to file and have
+the option to do so or not
