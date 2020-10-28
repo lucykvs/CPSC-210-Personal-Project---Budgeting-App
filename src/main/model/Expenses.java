@@ -1,5 +1,7 @@
 package model;
 
+import jdk.jfr.Category;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +17,8 @@ public class Expenses {
     // REQUIRES: amount >= 0
     // MODIFIES: this
     // EFFECTS: adds a new cost to the collection of expenses
-    public void addCost(String description, double amount) {
-        Cost c = new Cost(description, amount);
+    public void addCost(CostCategory category, String description, double amount) {
+        Cost c = new Cost(category, description, amount);
         costs.add(c);
     }
 
