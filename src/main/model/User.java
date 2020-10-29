@@ -11,15 +11,15 @@ import java.util.List;
 public class User implements Writable {
     public String name;                   //username of account user
     public Budget budget;                 //budget of account user
-    private List<Fund> income;
-    private List<Cost> expenses;
+    public Income income;
+    public Expenses expenses;
 
     // EFFECTS: Constructs a user with given username and an empty budget
     public User(String username) {
         budget = new Budget();
         name = username;
-        income = new ArrayList<>();
-        expenses = new ArrayList<>();
+        income = new Income();
+        expenses = new Expenses();
     }
 
     // EFFECTS: returns name of user
@@ -35,13 +35,13 @@ public class User implements Writable {
     // MODIFIES: this
     // EFFECTS: adds cost to this user's budget
     public void addCost(Cost cost) {
-        expenses.add(cost);
+        expenses.addCost(cost.getCategory(), cost.getDescription(), cost.getAmount());
     }
 
     // MODIFIES: this
     // EFFECTS: adds fund to this user's income
     public void addFund(Fund fund) {
-        income.add(fund);
+        income.addFund(fund.getCategory(), fund.getDescription(), fund.getAmount());
     }
 
     @Override
@@ -55,22 +55,18 @@ public class User implements Writable {
 
     // EFFECTS: returns income in this user's budget as a JSON array
     private JSONArray incomeToJson() {
-        JSONArray jsonArray = new JSONArray();
+        JSONArray jsonArray;
 
-        for (Fund f : income) {
-            jsonArray.put(f.toJson());
-        }
+        jsonArray = income.incomeToJson();
 
         return jsonArray;
     }
 
     // EFFECTS: returns expenses in this user's budget as a JSON array
     private JSONArray expensesToJson() {
-        JSONArray jsonArray = new JSONArray();
+        JSONArray jsonArray;
 
-        for (Cost c : expenses) {
-            jsonArray.put(c.toJson());
-        }
+        jsonArray = expenses.expensesToJson();
 
         return jsonArray;
     }

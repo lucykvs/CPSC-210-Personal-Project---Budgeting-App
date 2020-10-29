@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,5 +43,19 @@ public class Income {
             total += f.getAmount();
         }
         return total;
+    }
+
+    public List<Fund> getFunds() {
+        return income;
+    }
+
+    public JSONArray incomeToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Fund f : income) {
+            jsonArray.put(f.toJson());
+        }
+
+        return jsonArray;
     }
 }
