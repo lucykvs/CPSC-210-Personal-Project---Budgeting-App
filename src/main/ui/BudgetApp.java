@@ -72,8 +72,10 @@ public class BudgetApp {
         System.out.println("\tc -> add cost");
         System.out.println("\ti -> add income");
         System.out.println("\tv -> view details");
+        System.out.println("\ts -> save budget to file");
+        System.out.println("\tl -> load budget from file");
         System.out.println("\tq -> quit");
-        System.out.println("\tType 'back' to return to username entry.");
+        System.out.println("\n\tType 'back' to return to username entry.");
     }
 
     // MODIFIES: this
@@ -85,6 +87,10 @@ public class BudgetApp {
             addFund();
         } else if (command.equals("v")) {
             viewDetails();
+        } else if (command.equals("s")) {
+            saveBudget();
+        } else if (command.equals("l")) {
+            loadBudget();
         } else {
             System.out.println("Selection not valid...");
         }
@@ -108,17 +114,43 @@ public class BudgetApp {
 
     // EFFECTS: prompts user to select category for their cost and returns it
     private CostCategory readCostCategory() {
-        System.out.println("Please select a category for your cost");
+        System.out.println("\nPlease select a category for your cost:\n");
 
         int menuLabel = 1;
         for (CostCategory c : CostCategory.values()) {
-            System.out.println(menuLabel + ":" + c);
+            System.out.println(menuLabel + ":" + getCatString(c));
             menuLabel++;
         }
 
         int menuSelection = input.nextInt();
         return CostCategory.values()[menuSelection - 1];
     }
+
+    // EFFECTS: converts CostCategory or FundCategory to more appealing string
+    public String getCatString(CostCategory c) {
+        String catString = "";
+
+        switch (c) {
+            case BILLS:
+                catString = "Bills";
+                break;
+            case DEBT_REPAYMENTS:
+                catString = "Debt repayments";
+                break;
+            case ONE_TIME_EXPENSES:
+                catString = "One-time expenses";
+                break;
+            case MISCELLANEOUS_PURCHASES:
+                catString = "Miscellaneous expenses";
+                break;
+            case FOR_FUN:
+                catString = "For fun!";
+                break;
+        }
+
+        return catString;
+    }
+
 
     // MODIFIES: this
     // EFFECTS: adds a fund to user's list of incomes
