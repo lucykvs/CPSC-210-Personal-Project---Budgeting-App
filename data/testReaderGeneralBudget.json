@@ -1,0 +1,27 @@
+{
+  "income": [
+    {
+      "amount": 2400,
+      "description": "Student loans",
+      "category": "LOAN"
+    },
+    {
+      "amount": 1222.75,
+      "description": "Las Margs",
+      "category": "EMPLOYMENT"
+    }
+  ],
+  "username": "Lucy",
+  "expenses": [
+    {
+      "amount": 3050,
+      "description": "Tuition",
+      "category": "ONE_TIME_EXPENSES"
+    },
+    {
+      "amount": 850,
+      "description": "Rent",
+      "category": "BILLS"
+    }
+  ]
+}
