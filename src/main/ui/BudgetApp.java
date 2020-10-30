@@ -1,10 +1,7 @@
 package ui;
 
 import jdk.jfr.Category;
-import model.Budget;
-import model.CostCategory;
-import model.FundCategory;
-import model.User;
+import model.*;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
@@ -16,7 +13,6 @@ import java.util.Scanner;
 // Budget application
 public class BudgetApp {
     private static final String JSON_STORE = "./data/budget.json";
-    private Budget budget;
     private Scanner input;
     public User user;
     private JsonWriter jsonWriter;
@@ -106,7 +102,7 @@ public class BudgetApp {
         double amount = input.nextDouble();
 
         if (amount >= 0.0) {
-            user.budget.expenses.addCost(category, description, amount);
+            user.addCost(new Cost(category, description, amount));
         } else {
             System.out.println("Cannot have a negative cost.\n");
         }
@@ -162,7 +158,7 @@ public class BudgetApp {
         double amount = input.nextDouble();
 
         if (amount >= 0.0) {
-            user.budget.income.addFund(category, description, amount);
+            user.addFund(new Fund(category, description, amount));
         } else {
             System.out.println("Cannot have a negative income.\n");
         }
@@ -202,16 +198,16 @@ public class BudgetApp {
     // EFFECTS: prints income and expense totals, budget balance, or list of expense or income descriptions
     public void printDetails(String selection) {
         if (selection.equals("totals")) {
-            System.out.println("Your total income is: $" + user.getBudget().getIncome().getTotalIncome());
-            System.out.println("Your total expenses are: $" + user.getBudget().getExpenses().getTotalExpenses());
+            System.out.println("Your total income is: $" + user.getTotalIncomeAmount());
+            System.out.println("Your total expenses are: $" + user.getTotalExpenseAmount());
         } else if (selection.equals("balance")) {
-            System.out.println("Your budget balance is: $" + user.getBudget().getBalance());
+            System.out.println("Your budget balance is: $" + user.getBudgetBalance());
         } else if (selection.equals("expenses")) {
             System.out.println("Your current expenses are:\n");
-            printAllDescriptions(user.getBudget().getExpenses().getAllCostDescriptions());
+            printAllDescriptions(user.getExpenses().getAllCostDescriptions());
         } else if (selection.equals("income")) {
             System.out.println("Your current sources of income are:\n");
-            printAllDescriptions(user.getBudget().getIncome().getAllFundDescriptions());
+            printAllDescriptions(user.getIncome().getAllFundDescriptions());
         } else {
             System.out.println("Selection not valid...");
         }

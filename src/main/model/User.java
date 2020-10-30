@@ -4,9 +4,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
 
-import java.util.ArrayList;
-import java.util.List;
-
 // Represents a user with a username and a budget
 public class User implements Writable {
     public String name;                   //username of account user
@@ -31,6 +28,32 @@ public class User implements Writable {
     public Budget getBudget() {
         return budget;
     }
+
+    // EFFECTS: gets total income amount of this user
+    public double getTotalIncomeAmount() {
+        return income.getTotalIncome();
+    }
+
+    public double getTotalExpenseAmount() {
+        return expenses.getTotalExpenses();
+    }
+
+    // EFFECTS: returns the balance of budget's income and expenses. If balance is positive, income > expenses.
+    // If balance is negative, expenses > income.
+    public double getBudgetBalance() {
+        return (income.getTotalIncome() - expenses.getTotalExpenses());
+    }
+
+    // EFFECTS: returns income object of this budget
+    public Income getIncome() {
+        return income;
+    }
+
+    // EFFECTS: returns expenses object of this budget
+    public Expenses getExpenses() {
+        return expenses;
+    }
+
 
     // MODIFIES: this
     // EFFECTS: adds cost to this user's budget
