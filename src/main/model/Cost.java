@@ -1,6 +1,5 @@
 package model;
 
-import jdk.jfr.Category;
 import org.json.JSONObject;
 import persistence.Writable;
 

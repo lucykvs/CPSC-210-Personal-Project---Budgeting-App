@@ -1,6 +1,5 @@
 package ui;
 
-import jdk.jfr.Category;
 import model.*;
 import persistence.JsonReader;
 import persistence.JsonWriter;

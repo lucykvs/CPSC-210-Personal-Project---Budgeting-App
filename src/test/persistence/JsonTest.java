@@ -5,7 +5,7 @@ import model.CostCategory;
 import model.Fund;
 import model.FundCategory;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JsonTest {
     protected void checkCost(CostCategory category, String description, double amount, Cost cost) {

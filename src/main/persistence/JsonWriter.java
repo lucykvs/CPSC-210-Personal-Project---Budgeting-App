@@ -3,7 +3,9 @@ package persistence;
 import model.User;
 import org.json.JSONObject;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 // Represents a writer that writes JSON representation of user's budget to file
 public class JsonWriter {
