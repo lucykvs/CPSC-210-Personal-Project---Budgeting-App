@@ -31,6 +31,7 @@ public class Cost implements Writable {
         return amount;
     }
 
+    // EFFECTS: returns JSON representation of cost
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

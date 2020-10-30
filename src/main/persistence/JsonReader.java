@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 // Represents a reader that reads user's budget from JSON data stored in file
+// Note: JSON data persistence in this project was modeled off of JsonSerializationDemo, CPSC 210 2020 teaching team
 public class JsonReader {
     private String source;
 

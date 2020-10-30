@@ -45,10 +45,12 @@ public class Income {
         return total;
     }
 
+    // EFFECTS: returns list of funds in income
     public List<Fund> getFunds() {
         return income;
     }
 
+    // EFFECTS: returns JSON representation of income
     public JSONArray incomeToJson() {
         JSONArray jsonArray = new JSONArray();
 

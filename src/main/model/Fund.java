@@ -31,6 +31,7 @@ public class Fund implements Writable {
         return amount;
     }
 
+    // EFFECTS: returns JSON representation of fund
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

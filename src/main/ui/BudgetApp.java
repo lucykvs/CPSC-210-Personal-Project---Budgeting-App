@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Scanner;
 
 // Budget application
+// Note: JSON data persistence in this project was modeled off of JsonSerializationDemo, CPSC 210 2020 teaching team
 public class BudgetApp {
     private static final String JSON_STORE = "./data/budget.json";
     private Scanner input;
@@ -68,7 +69,6 @@ public class BudgetApp {
             username = user.name;
             System.out.println("\tWelcome back " + username + "!");
         }
-
         return username;
     }
 
@@ -87,7 +87,7 @@ public class BudgetApp {
         System.out.println("\nSelect from:");
         System.out.println("\tc -> add cost");
         System.out.println("\ti -> add income");
-        System.out.println("\td -> view details");
+        System.out.println("\tv -> view details");
         System.out.println("\ts -> save budget to file");
         System.out.println("\tq -> quit");
         System.out.println("\n\tType 'back' to return to username entry.\n");
@@ -100,7 +100,7 @@ public class BudgetApp {
             addCost();
         } else if (command.equals("i")) {
             addFund();
-        } else if (command.equals("d")) {
+        } else if (command.equals("v")) {
             viewDetails();
         } else if (command.equals("s")) {
             saveUser();
@@ -217,20 +217,17 @@ public class BudgetApp {
         return catString;
     }
 
-
-
     // EFFECTS: prompts user to enter 'totals', 'balance', 'expenses', 'or income' to view details of their budget
     public void viewDetails() {
         String select = "";  // force entry into loop
 
-        while (!(select.equals("totals") || select.equals("balance")
-                || select.equals("expenses") || select.equals("income"))) {
+        while (!(select.equals("t") || select.equals("b")
+                || select.equals("e") || select.equals("i"))) {
             System.out.println("\nSelect from the following options to view more details:\n");
             System.out.println("\tt -> for total income and expense amounts");
             System.out.println("\tb -> for your budget balance");
             System.out.println("\te -> for a list of descriptions of your expenses");
-            System.out.println("\tf -> for a list of descriptions of your sources of income");
-            System.out.println("\n\tType 'back' to return to previous menu.\n");
+            System.out.println("\ti -> for a list of descriptions of your sources of income");
             select = input.next();
             select = select.toLowerCase();
             printDetails(select);
@@ -247,11 +244,9 @@ public class BudgetApp {
         } else if (selection.equals("e")) {
             System.out.println("\tYour current expenses are:\n");
             printAllDescriptions(user.getExpenses().getAllCostDescriptions());
-        } else if (selection.equals("f")) {
+        } else if (selection.equals("i")) {
             System.out.println("\tYour current sources of income are:\n");
             printAllDescriptions(user.getIncome().getAllFundDescriptions());
-        } else if (selection.equals("back")) {
-            displayMenu();
         } else {
             System.out.println("\tSelection not valid...\n");
         }

@@ -30,5 +30,3 @@ This app will be useful for:
 #### User Stories, Phase 2: 
 - As a user, I want to be able to save my budget to a file
 - As a user, I want to be able to reload my budget from a file in the future
-- As a user, when I select the quit option from the app menu, I want to be reminded to save my budget to file and have
-the option to do so or not

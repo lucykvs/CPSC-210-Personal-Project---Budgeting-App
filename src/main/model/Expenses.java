@@ -44,10 +44,12 @@ public class Expenses {
         return total;
     }
 
+    // EFFECTS: returns list of costs in expenses
     public List<Cost> getCosts() {
         return expenses;
     }
 
+    // EFFECTS: return JSON representation of expenses
     public JSONArray expensesToJson() {
         JSONArray jsonArray = new JSONArray();
 

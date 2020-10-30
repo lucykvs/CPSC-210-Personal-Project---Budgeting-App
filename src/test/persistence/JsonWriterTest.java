@@ -18,8 +18,6 @@ class JsonWriterTest extends JsonTest {
     private final FundCategory fc1 = FundCategory.EMPLOYMENT;
     private final FundCategory fc2 = FundCategory.LOAN;
 
-
-
     @Test
     void testWriterInvalidFile() {
         try {

@@ -24,17 +24,18 @@ public class User implements Writable {
         return name;
     }
 
-    // EFFECTS: gets total income amount of this user
+    // EFFECTS: returns total income amount of user
     public double getTotalIncomeAmount() {
         return income.getTotalIncome();
     }
 
+    // EFFECTS: returns total expense amount of user
     public double getTotalExpenseAmount() {
         return expenses.getTotalExpenses();
     }
 
     // EFFECTS: returns the balance of budget's income and expenses. If balance is positive, income > expenses.
-    // If balance is negative, expenses > income.
+    //          If balance is negative, expenses > income.
     public double getBudgetBalance() {
         return (income.getTotalIncome() - expenses.getTotalExpenses());
     }
@@ -49,19 +50,19 @@ public class User implements Writable {
         return expenses;
     }
 
-
     // MODIFIES: this
-    // EFFECTS: adds cost to this user's budget
+    // EFFECTS: adds a cost to user's budget
     public void addCost(Cost cost) {
         expenses.addCost(cost.getCategory(), cost.getDescription(), cost.getAmount());
     }
 
     // MODIFIES: this
-    // EFFECTS: adds fund to this user's income
+    // EFFECTS: adds a fund to user's income
     public void addFund(Fund fund) {
         income.addFund(fund.getCategory(), fund.getDescription(), fund.getAmount());
     }
 
+    // EFFECTS: returns JSON representation of user
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
