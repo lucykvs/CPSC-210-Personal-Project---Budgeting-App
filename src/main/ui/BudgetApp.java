@@ -19,7 +19,6 @@ public class BudgetApp {
 
     // EFFECTS: runs the budget application
     public BudgetApp() {
-        System.out.println("Welcome to your budgeting application!");
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
         runBudgetApp();
@@ -28,19 +27,21 @@ public class BudgetApp {
     // MODIFIES: this
     // EFFECTS: processes user input
     private void runBudgetApp() {
+        System.out.println("Welcome to your budgeting application!");
         boolean keepGoing = true;
         String command;
 
-        String username = init();
+        input = new Scanner(System.in);
+        String username = displayLoadMenu();
 
         while (keepGoing) {
-            displayMenu(username);
+            displayMenu();
 
             command = input.next();
             command = command.toLowerCase();
 
             if (command.equals("back")) {
-                username = init();
+                username = displayLoadMenu();
             } else if (command.equals("q")) {
                 keepGoing = false;
             } else {
@@ -51,10 +52,30 @@ public class BudgetApp {
     }
 
     // MODIFIES: this
+    // EFFECTS: gives user option to create new user or load previous
+    private String displayLoadMenu() {
+        System.out.println("\nChoose from the following options:");
+        System.out.println("\tc -> create new user");
+        System.out.println("\tl -> load previous user's budget\n");
+
+        String command = input.next();
+        String username = " ";
+
+        if (command.equals("c")) {
+            username = initNewUser();
+        } else if (command.equals("l")) {
+            loadUser();
+            username = user.name;
+            System.out.println("\tWelcome back " + username + "!");
+        }
+
+        return username;
+    }
+
+    // MODIFIES: this
     // EFFECTS: prompts user for username and sets this user's name
-    private String init() {
-        input = new Scanner(System.in);
-        System.out.print("Enter your username: ");
+    private String initNewUser() {
+        System.out.print("\tEnter your username: ");
         String username = (input.next() + input.nextLine());
         user = new User(username);
         System.out.println("\nHi " + username + "! You are currently working on your monthly budget.");
@@ -62,15 +83,14 @@ public class BudgetApp {
     }
 
     // EFFECTS: displays menu of options to user
-    private void displayMenu(String username) {
+    private void displayMenu() {
         System.out.println("\nSelect from:");
         System.out.println("\tc -> add cost");
         System.out.println("\ti -> add income");
-        System.out.println("\tv -> view details");
+        System.out.println("\td -> view details");
         System.out.println("\ts -> save budget to file");
-        System.out.println("\tl -> load budget from file");
         System.out.println("\tq -> quit");
-        System.out.println("\n\tType 'back' to return to username entry.");
+        System.out.println("\n\tType 'back' to return to username entry.\n");
     }
 
     // MODIFIES: this
@@ -80,14 +100,12 @@ public class BudgetApp {
             addCost();
         } else if (command.equals("i")) {
             addFund();
-        } else if (command.equals("v")) {
+        } else if (command.equals("d")) {
             viewDetails();
         } else if (command.equals("s")) {
-            saveBudget();
-        } else if (command.equals("l")) {
-            loadBudget();
+            saveUser();
         } else {
-            System.out.println("Selection not valid...");
+            System.out.println("\tSelection not valid...");
         }
     }
 
@@ -95,15 +113,15 @@ public class BudgetApp {
     // EFFECTS: adds a cost to user's list of expenses
     public void addCost() {
         CostCategory category = readCostCategory();
-        System.out.print("Enter cost description: ");
+        System.out.print("\tEnter cost description: ");
         String description = (input.next() + input.nextLine());
-        System.out.print("Enter amount of cost: $");
+        System.out.print("\tEnter amount of cost: $");
         double amount = input.nextDouble();
 
         if (amount >= 0.0) {
             user.addCost(new Cost(category, description, amount));
         } else {
-            System.out.println("Cannot have a negative cost.\n");
+            System.out.println("\tCannot have a negative cost.\n");
         }
     }
 
@@ -113,7 +131,7 @@ public class BudgetApp {
 
         int menuLabel = 1;
         for (CostCategory c : CostCategory.values()) {
-            System.out.println(menuLabel + ":" + getCostCatString(c));
+            System.out.println("\t" + menuLabel + " -> " + getCostCatString(c));
             menuLabel++;
         }
 
@@ -151,9 +169,9 @@ public class BudgetApp {
     // EFFECTS: adds a fund to user's list of incomes
     public void addFund() {
         FundCategory category = readFundCategory();
-        System.out.print("Enter income description: ");
+        System.out.print("\tEnter income description: ");
         String description = (input.next() + input.nextLine());
-        System.out.print("Enter amount of income: $");
+        System.out.print("\tEnter amount of income: $");
         double amount = input.nextDouble();
 
         if (amount >= 0.0) {
@@ -169,7 +187,7 @@ public class BudgetApp {
 
         int menuLabel = 1;
         for (FundCategory f : FundCategory.values()) {
-            System.out.println(menuLabel + ":" + getFundCatString(f));
+            System.out.println("\t" + menuLabel + " -> " + getFundCatString(f));
             menuLabel++;
         }
 
@@ -203,35 +221,39 @@ public class BudgetApp {
 
     // EFFECTS: prompts user to enter 'totals', 'balance', 'expenses', 'or income' to view details of their budget
     public void viewDetails() {
-        String selection = "";  // force entry into loop
+        String select = "";  // force entry into loop
 
-        while (!(selection.equals("totals") || selection.equals("balance")
-                || selection.equals("expenses") || selection.equals("income"))) {
-            System.out.println("Type 'totals' for your total income and expense amounts");
-            System.out.println("Type 'balance' for your budget balance");
-            System.out.println("Type 'expenses' for a list of descriptions of your expenses");
-            System.out.println("Type 'income' for a list of descriptions of your sources of income");
-            selection = input.next();
-            selection = selection.toLowerCase();
-            printDetails(selection);
+        while (!(select.equals("totals") || select.equals("balance")
+                || select.equals("expenses") || select.equals("income"))) {
+            System.out.println("\nSelect from the following options to view more details:\n");
+            System.out.println("\tt -> for total income and expense amounts");
+            System.out.println("\tb -> for your budget balance");
+            System.out.println("\te -> for a list of descriptions of your expenses");
+            System.out.println("\tf -> for a list of descriptions of your sources of income");
+            System.out.println("\n\tType 'back' to return to previous menu.\n");
+            select = input.next();
+            select = select.toLowerCase();
+            printDetails(select);
         }
     }
 
     // EFFECTS: prints income and expense totals, budget balance, or list of expense or income descriptions
     public void printDetails(String selection) {
-        if (selection.equals("totals")) {
-            System.out.println("Your total income is: $" + user.getTotalIncomeAmount());
-            System.out.println("Your total expenses are: $" + user.getTotalExpenseAmount());
-        } else if (selection.equals("balance")) {
-            System.out.println("Your budget balance is: $" + user.getBudgetBalance());
-        } else if (selection.equals("expenses")) {
-            System.out.println("Your current expenses are:\n");
+        if (selection.equals("t")) {
+            System.out.println("\tYour total income is: $" + user.getTotalIncomeAmount());
+            System.out.println("\tYour total expenses are: $" + user.getTotalExpenseAmount());
+        } else if (selection.equals("b")) {
+            System.out.println("\tYour budget balance is: $" + user.getBudgetBalance());
+        } else if (selection.equals("e")) {
+            System.out.println("\tYour current expenses are:\n");
             printAllDescriptions(user.getExpenses().getAllCostDescriptions());
-        } else if (selection.equals("income")) {
-            System.out.println("Your current sources of income are:\n");
+        } else if (selection.equals("f")) {
+            System.out.println("\tYour current sources of income are:\n");
             printAllDescriptions(user.getIncome().getAllFundDescriptions());
+        } else if (selection.equals("back")) {
+            displayMenu();
         } else {
-            System.out.println("Selection not valid...");
+            System.out.println("\tSelection not valid...\n");
         }
     }
 
@@ -240,13 +262,13 @@ public class BudgetApp {
         int i = 1;
 
         for (String d : allDescriptions) {
-            System.out.println(i + "." + d);
+            System.out.println(i + ". " + d);
             i++;
         }
     }
 
     // EFFECTS: saves the user's budget information to a file
-    private void saveBudget() {
+    private void saveUser() {
         try {
             jsonWriter.open();
             jsonWriter.write(user);
@@ -259,7 +281,7 @@ public class BudgetApp {
 
     // MODIFIES: this
     // EFFECTS: loads user and budget information from file
-    private void loadBudget() {
+    private void loadUser() {
         try {
             user = jsonReader.read();
             System.out.println("Loaded " + user.getName() + "'s budget from " + JSON_STORE);
