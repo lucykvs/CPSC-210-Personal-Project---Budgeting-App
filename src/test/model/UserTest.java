@@ -27,6 +27,32 @@ public class UserTest {
     }
 
     @Test
+    public void testGetTotalIncomeAmountEmptyIncome() {
+        assertEquals(0,user.getTotalIncomeAmount());
+    }
+
+    @Test
+    public void testGetTotalIncomeAmountSomeIncome() {
+        user.getIncome().addFund(fc1,"Work", 2000);
+        user.getIncome().addFund(fc4,"Bursary",1200);
+
+        assertEquals(2000+1200,user.getTotalIncomeAmount());
+    }
+
+    @Test
+    public void testGetTotalExpenseAmountEmptyExpenses() {
+        assertEquals(0,user.getTotalExpenseAmount());
+    }
+
+    @Test
+    public void testGetTotalExpenseAmountSomeExpenses() {
+        user.getExpenses().addCost(cc1,"Groceries", 150);
+        user.getExpenses().addCost(cc1,"Gas",90);
+
+        assertEquals(150+90,user.getTotalExpenseAmount());
+    }
+
+    @Test
     public void testGetBudgetBalanceEmptyBudget() {
         double balance = user.getBudgetBalance();
 
