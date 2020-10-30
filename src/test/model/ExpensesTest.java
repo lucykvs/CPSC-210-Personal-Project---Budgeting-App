@@ -1,5 +1,6 @@
 package model;
 
+import org.json.JSONArray;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -89,5 +90,34 @@ public class ExpensesTest {
             count = count + 5;
             assertEquals(count, myExpenses.getTotalExpenses());
         }
+    }
+
+    @Test
+    public void testGetCostsEmptyExpenses(){
+        Expenses myExpenses = new Expenses();
+        List<Cost> myCosts = myExpenses.getCosts();
+
+        assertEquals(0,myCosts.size());
+    }
+
+    @Test
+    public void testGetCostsNonEmptyIncome() {
+        Expenses myExpenses = new Expenses();
+        myExpenses.addCost(cc1, "Rent", 850);
+
+        List<Cost> myCosts = myExpenses.getCosts();
+
+        assertEquals(1, myCosts.size());
+    }
+
+    @Test
+    public void testExpensesToJson() {
+        JSONArray jsonArray = new JSONArray();
+        Expenses myExpenses = new Expenses();
+        myExpenses.addCost(cc1,"Rent", 850);
+        myExpenses.addCost(cc2,"Student loan payments",200);
+
+        jsonArray = myExpenses.expensesToJson();
+        assertEquals(2,jsonArray.length());
     }
 }

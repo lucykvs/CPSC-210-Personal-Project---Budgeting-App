@@ -24,11 +24,6 @@ public class User implements Writable {
         return name;
     }
 
-    // EFFECTS: returns budget of user
-    public Budget getBudget() {
-        return budget;
-    }
-
     // EFFECTS: gets total income amount of this user
     public double getTotalIncomeAmount() {
         return income.getTotalIncome();

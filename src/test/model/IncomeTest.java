@@ -1,5 +1,6 @@
 package model;
 
+import org.json.JSONArray;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -60,8 +61,6 @@ public class IncomeTest {
         assertEquals(10000, descriptions.size());
     }
 
-
-
     @Test
     public void testGetTotalIncomeEmpty() {
         Income myIncome = new Income();  //empty collection
@@ -89,5 +88,34 @@ public class IncomeTest {
             count = count + 5;
             assertEquals(count, myIncome.getTotalIncome());
         }
+    }
+
+    @Test
+    public void testGetFundsEmptyIncome(){
+        Income myIncome = new Income();
+        List<Fund> myFunds = myIncome.getFunds();
+
+        assertEquals(0,myFunds.size());
+    }
+
+    @Test
+    public void testGetFundsNonEmptyIncome(){
+        Income myIncome = new Income();
+        myIncome.addFund(fc1,"Work", 2000);
+
+        List<Fund> myFunds = myIncome.getFunds();
+
+        assertEquals(1,myFunds.size());
+    }
+
+    @Test
+    public void testIncomeToJson() {
+        JSONArray jsonArray = new JSONArray();
+        Income myIncome = new Income();
+        myIncome.addFund(fc1,"Work", 2000);
+        myIncome.addFund(fc2,"Bursary",1200);
+
+        jsonArray = myIncome.incomeToJson();
+        assertEquals(2,jsonArray.length());
     }
 }
