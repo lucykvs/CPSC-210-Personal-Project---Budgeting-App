@@ -113,7 +113,7 @@ public class BudgetApp {
 
         int menuLabel = 1;
         for (CostCategory c : CostCategory.values()) {
-            System.out.println(menuLabel + ":" + getCatString(c));
+            System.out.println(menuLabel + ":" + getCostCatString(c));
             menuLabel++;
         }
 
@@ -121,8 +121,8 @@ public class BudgetApp {
         return CostCategory.values()[menuSelection - 1];
     }
 
-    // EFFECTS: converts CostCategory or FundCategory to more appealing string
-    public String getCatString(CostCategory c) {
+    // EFFECTS: converts CostCategory to more appealing string
+    public String getCostCatString(CostCategory c) {
         String catString = "";
 
         switch (c) {
@@ -168,14 +168,37 @@ public class BudgetApp {
         System.out.println("Please select a category for your source of income");
 
         int menuLabel = 1;
-        for (FundCategory c : FundCategory.values()) {
-            System.out.println(menuLabel + ":" + c);
+        for (FundCategory f : FundCategory.values()) {
+            System.out.println(menuLabel + ":" + getFundCatString(f));
             menuLabel++;
         }
 
         int menuSelection = input.nextInt();
         return FundCategory.values()[menuSelection - 1];
     }
+
+    // EFFECTS: converts FundCategory to more appealing string
+    public String getFundCatString(FundCategory f) {
+        String catString = "";
+
+        switch (f) {
+            case EMPLOYMENT:
+                catString = "Employment";
+                break;
+            case LOAN:
+                catString = "Loans";
+                break;
+            case GIFT:
+                catString = "Gifts";
+                break;
+            case OTHER:
+                catString = "Other";
+                break;
+        }
+
+        return catString;
+    }
+
 
 
     // EFFECTS: prompts user to enter 'totals', 'balance', 'expenses', 'or income' to view details of their budget
