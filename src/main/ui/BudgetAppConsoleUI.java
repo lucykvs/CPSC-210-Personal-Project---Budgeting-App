@@ -11,15 +11,20 @@ import java.util.Scanner;
 
 // Budget application
 // Note: JSON data persistence in this project was modeled off of JsonSerializationDemo, CPSC 210 2020 teaching team
-public class BudgetApp {
+public class BudgetAppConsoleUI {
     private static final String JSON_STORE = "./data/budget.json";
     private Scanner input;
-    public User user;
+    private User user;
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
 
+    // EFFECTS: runs console-based UI of budget application
+    public static void main(String[] args) {
+        new BudgetAppConsoleUI();
+    }
+
     // EFFECTS: runs the budget application
-    public BudgetApp() {
+    public BudgetAppConsoleUI() {
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
         runBudgetApp();
