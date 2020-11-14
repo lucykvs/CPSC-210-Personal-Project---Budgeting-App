@@ -1,26 +1,20 @@
 package ui;
 
-import model.User;
-import persistence.JsonReader;
-import persistence.JsonWriter;
-
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class BudgetAppGUI extends JFrame {
-    private static final String JSON_STORE = "./data/budget.json";
-    private JsonWriter jsonWriter;
-    private JsonReader jsonReader;
-    private JPanel panel;
-    private JLabel label;
-    private User user;
-//    jsonWriter = new JsonWriter(JSON_STORE);
-//    jsonReader = new JsonReader(JSON_STORE);
-    private static final int WIDTH = 900;
-    private static final int HEIGHT = 600;
+    private JPanel userPanel;
+    private JPanel detailPanel;
+    private JPanel buttonPanel;
+    private JPanel budgetPanel;
 
-    private JButton button;
-    private GridBagConstraints cons;
+    private static final int WIDTH = 800;
+    private static final int HEIGHT = 600;
 
     // EFFECTS: runs GUI of budget application
     public static void main(String[] args) {
@@ -37,7 +31,6 @@ public class BudgetAppGUI extends JFrame {
     // EFFECTS: draws the JFrame window where this BudgetApp will operate, and adds the buttons to be used to add to
     //          this budget
     private void initializeGraphics() {
-        setLocation(0,0);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -48,105 +41,157 @@ public class BudgetAppGUI extends JFrame {
     }
 
     private void addComponentsToPane(Container pane) {
-        pane.setLayout(new GridBagLayout());
-
         createUserPanel(pane);
         createDetailPanel(pane);
         createBudgetPanel(pane);
         createButtonPanel(pane);
-        createSaveExitPanel(pane);
+        setContentPaneLayout(pane);
+    }
+
+    private void setContentPaneLayout(Container pane) {
+        GroupLayout contentPaneLayout = new GroupLayout(pane);
+
+        pane.setLayout(contentPaneLayout);
+        setHorizontalGroup(contentPaneLayout);
+        setVerticalGroup(contentPaneLayout);
+
+        pack();
+        setLocationRelativeTo(getOwner());
+    }
+
+    private void setVerticalGroup(GroupLayout contentPaneLayout) {
+        contentPaneLayout.setVerticalGroup(
+                contentPaneLayout.createParallelGroup()
+                        .addGroup(contentPaneLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(detailPanel, 200, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(userPanel, 200, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(contentPaneLayout.createParallelGroup()
+                                        .addComponent(buttonPanel, GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
+                                        .addComponent(budgetPanel, GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE))
+                                .addGap(0, 0, 0))
+        );
+    }
+
+    private void setHorizontalGroup(GroupLayout contentPaneLayout) {
+        contentPaneLayout.setHorizontalGroup(
+                contentPaneLayout.createParallelGroup()
+                        .addGroup(contentPaneLayout.createSequentialGroup()
+                                .addGroup(contentPaneLayout.createParallelGroup()
+                                        .addComponent(buttonPanel, 200, 200, 200)
+                                        .addComponent(userPanel, GroupLayout.Alignment.TRAILING,
+                                                200, 200, 200))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(contentPaneLayout.createParallelGroup()
+                                        .addComponent(detailPanel, GroupLayout.DEFAULT_SIZE,
+                                                396, Short.MAX_VALUE)
+                                        .addComponent(budgetPanel, GroupLayout.DEFAULT_SIZE,
+                                                396, Short.MAX_VALUE)))
+        );
     }
 
     private void createUserPanel(Container pane) {
-        panel = new JPanel();
-        panel.setBorder(BorderFactory.createBevelBorder(1));
+        userPanel = new JPanel();
+        userPanel.setMinimumSize(new Dimension(80, HEIGHT / 4));
+        userPanel.setMaximumSize(new Dimension(WIDTH / 4, HEIGHT / 4));
+        userPanel.setPreferredSize(new Dimension(WIDTH / 4, HEIGHT / 4));
+        userPanel.setBorder(new javax.swing.border.CompoundBorder(BorderFactory.createBevelBorder(1),
+                new javax.swing.border.TitledBorder(userPanel.getBorder(),"User:",javax.swing.border.TitledBorder
+                .CENTER,javax.swing.border.TitledBorder.TOP,new Font("Arial",Font.BOLD,14),
+                Color.blue)));
 
-        label = new JLabel("User:");
-        cons = new GridBagConstraints();
+        userPanel.setLayout(new GridBagLayout());
+        ((GridBagLayout)userPanel.getLayout()).columnWidths = new int[] {0, 0, 0};
+        ((GridBagLayout)userPanel.getLayout()).rowHeights = new int[] {0, 0, 0, 0};
+        ((GridBagLayout)userPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 1.0E-4};
+        ((GridBagLayout)userPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
 
-        cons.weightx = 0.25;    // request this weight of extra horizontal space
-        cons.weighty = 0.35;   // request this weight of extra vertical space
-        cons.fill = GridBagConstraints.BOTH;
-        cons.gridx = 0;        // place on grid
-        cons.gridy = 0;        // place on grid
+        addUserPhoto();
+        pane.add(userPanel);
+    }
 
-        panel.add(label);
-        pane.add(panel, cons);
+    private void addUserPhoto() {
+        try {
+            BufferedImage fullSizeUserPic = ImageIO.read(new File("./data/tobs.jpg"));
+            Image scaledUserPic = fullSizeUserPic.getScaledInstance(userPanel.getPreferredSize().width - 75,
+                    userPanel.getPreferredSize().height - 20, Image.SCALE_SMOOTH);
+            JLabel imagePanel = new JLabel(new ImageIcon(scaledUserPic));
+            userPanel.add(imagePanel, new GridBagConstraints(2, 2, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 5, 0), 0, 0));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // MODIFIES:
     private void createButtonPanel(Container pane) {
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel = new JPanel();
         buttonPanel.setBorder(BorderFactory.createBevelBorder(1));
 
-        JButton exButton = new JButton("Add expense");
-        JButton inButton = new JButton("Add income");
-        JButton filtButton = new JButton("Filter");
-        cons = new GridBagConstraints();
+        buttonPanel.setLayout(new GridLayout(7, 0));
+        JPanel vspacer1 = new JPanel(null);
+        JPanel vspacer2 = new JPanel(null);
+        JPanel vspacer3 = new JPanel(null);
 
-        cons.fill = GridBagConstraints.BOTH;
-        cons.weightx = 0.25;
-        cons.weighty = 0.65;
-        cons.gridwidth = 2;
-        cons.gridx = 0;
-        cons.gridy = 1;
+        //---- addExpenseButton ----
+        JButton addExpenseButton = new JButton("Add Expense");
+        buttonPanel.add(addExpenseButton);
+        buttonPanel.add(vspacer1);
 
-        buttonPanel.add(Box.createRigidArea(new Dimension(buttonPanel.getWidth() / 2,100)));
-        buttonPanel.add(exButton);
-        buttonPanel.add(Box.createRigidArea(new Dimension(5,60)));
-        buttonPanel.add(inButton);
-        buttonPanel.add(Box.createRigidArea(new Dimension(5,60)));
-        buttonPanel.add(filtButton);
-        buttonPanel.add(Box.createRigidArea(new Dimension(5,60)));
+        //---- addIncomeButton ----
+        JButton addIncomeButton = new JButton("Add Income");
+        buttonPanel.add(addIncomeButton);
+        buttonPanel.add(vspacer2);
 
-        pane.add(buttonPanel, cons);
+        //---- filterButton ----
+        JButton filterButton = new JButton("Filter");
+        buttonPanel.add(filterButton);
+        buttonPanel.add(vspacer3);
+
+        // Save/exit button
+        JButton saveExitButton = new JButton("Save/Exit");
+        buttonPanel.add(saveExitButton);
+
+        pane.add(buttonPanel);
     }
 
     private void createDetailPanel(Container pane) {
-        panel = new JPanel();
-        panel.setBorder(BorderFactory.createBevelBorder(1));
+        detailPanel = new JPanel();
+        detailPanel.setBorder(BorderFactory.createBevelBorder(1));
 
-        label = new JLabel("Balance:");
-        cons = new GridBagConstraints();
+        detailPanel.setBorder(new javax.swing.border.CompoundBorder(BorderFactory.createBevelBorder(1),
+                new javax.swing.border.TitledBorder(detailPanel.getBorder(),
+                        "Budget Details:",javax.swing.border.TitledBorder.LEFT,
+                        javax.swing.border.TitledBorder.TOP,new Font("Arial",Font.BOLD,14),
+                        Color.blue)));
 
-        cons.fill = GridBagConstraints.BOTH;
-        cons.weightx = 0.75;
-        cons.gridx = 1;
-        cons.gridy = 0;
-        panel.add(label);
-        pane.add(panel, cons);
+        detailPanel.setLayout(new GridBagLayout());
+        ((GridBagLayout)detailPanel.getLayout()).rowHeights = new int[] {0, 0, 0, 0};
+        ((GridBagLayout)detailPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
+
+        pane.add(detailPanel);
     }
 
     private void createBudgetPanel(Container pane) {
-        panel = new JPanel();
-        panel.setBorder(BorderFactory.createBevelBorder(1));
+        budgetPanel = new JPanel();
+        budgetPanel.setBorder(BorderFactory.createBevelBorder(1));
+        budgetPanel.setLayout(new GridLayout());
 
-        label = new JLabel("Transactions:");
-        cons = new GridBagConstraints();
+        JTable budgetTable = new JTable();
+        JScrollPane scrollPane = new JScrollPane();
 
-        cons.fill = GridBagConstraints.BOTH;
-        cons.weighty = 0.75;
-        cons.gridwidth = 2;
-        cons.gridx = 1;
-        cons.gridy = 1;
-        panel.add(label);
-        pane.add(panel, cons);
+        budgetPanel.setBorder(new javax.swing.border.CompoundBorder(BorderFactory.createBevelBorder(1),
+                new javax.swing.border.TitledBorder(budgetPanel.getBorder(),"Transactions:",
+                        javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP,
+                        new Font("Arial",Font.BOLD,14), Color.blue)));
+
+        budgetTable.setColumnSelectionAllowed(true);
+        scrollPane.setViewportView(budgetTable);
+
+        budgetPanel.add(scrollPane);
+        pane.add(budgetPanel);
     }
-
-    public void createSaveExitPanel(Container pane) {
-        button = new JButton("5");
-        cons = new GridBagConstraints();
-
-        cons.fill = GridBagConstraints.HORIZONTAL;
-        cons.ipady = 0;       //reset to default
-        cons.weighty = 0;     //request no extra vertical space
-        cons.anchor = GridBagConstraints.PAGE_END; //bottom of space
-        cons.insets = new Insets(10,0,0,0);  //top padding
-        cons.gridx = 0;       //aligned with button 2
-        cons.gridwidth = 2;   //2 columns wide
-        cons.gridy = 2;       //third row
-        pane.add(button, cons);
-    }
-
 }
