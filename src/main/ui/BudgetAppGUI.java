@@ -1,25 +1,36 @@
 package ui;
 
+import model.User;
+import persistence.JsonReader;
+import persistence.JsonWriter;
+import ui.tools.AddExpenseWindow;
+import ui.tools.SaveExitWindow;
+import ui.tools.StartUpWindow;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class BudgetAppGUI extends JFrame {
+public class BudgetAppGUI extends JFrame implements ActionListener {
     private JPanel userPanel;
     private JPanel detailPanel;
     private JPanel buttonPanel;
     private JPanel budgetPanel;
+    private static final String JSON_STORE = "./data/budget.json";
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
+    private static User user;
 
-    private static final int WIDTH = 800;
-    private static final int HEIGHT = 600;
-
-    // EFFECTS: runs GUI of budget application
-    public static void main(String[] args) {
-        new BudgetAppGUI();
-    }
+    public static final int WIDTH = 800;
+    public static final int HEIGHT = 600;
 
     // EFFECTS: runs the budget application
     public BudgetAppGUI() {
@@ -31,16 +42,24 @@ public class BudgetAppGUI extends JFrame {
     // EFFECTS: draws the JFrame window where this BudgetApp will operate, and adds the buttons to be used to add to
     //          this budget
     private void initializeGraphics() {
-        setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         addComponentsToPane(getContentPane());
 
         pack();
-        setVisible(true);
     }
 
-    private void addComponentsToPane(Container pane) {
+    public static void setUser(String username) {
+        user = new User(username);
+    }
+
+    public static void setUser(User previousUser) {
+        user = previousUser;
+    }
+
+    public static User getUser() {
+        return user;
+    }
+
+    public void addComponentsToPane(Container pane) {
         createUserPanel(pane);
         createDetailPanel(pane);
         createBudgetPanel(pane);
@@ -56,6 +75,7 @@ public class BudgetAppGUI extends JFrame {
         setVerticalGroup(contentPaneLayout);
 
         pack();
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(getOwner());
     }
 
@@ -69,8 +89,8 @@ public class BudgetAppGUI extends JFrame {
                                         .addComponent(userPanel, 200, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(contentPaneLayout.createParallelGroup()
-                                        .addComponent(buttonPanel, GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
-                                        .addComponent(budgetPanel, GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE))
+                                        .addComponent(buttonPanel, GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                                        .addComponent(budgetPanel, GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
                                 .addGap(0, 0, 0))
         );
     }
@@ -86,9 +106,9 @@ public class BudgetAppGUI extends JFrame {
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(contentPaneLayout.createParallelGroup()
                                         .addComponent(detailPanel, GroupLayout.DEFAULT_SIZE,
-                                                396, Short.MAX_VALUE)
+                                                450, Short.MAX_VALUE)
                                         .addComponent(budgetPanel, GroupLayout.DEFAULT_SIZE,
-                                                396, Short.MAX_VALUE)))
+                                                450, Short.MAX_VALUE)))
         );
     }
 
@@ -137,25 +157,60 @@ public class BudgetAppGUI extends JFrame {
         JPanel vspacer3 = new JPanel(null);
 
         //---- addExpenseButton ----
-        JButton addExpenseButton = new JButton("Add Expense");
+        JButton addExpenseButton = new JButton("Add expense");
         buttonPanel.add(addExpenseButton);
         buttonPanel.add(vspacer1);
+        addExpenseButton.setActionCommand("Add expense");
+        addExpenseButton.addActionListener(this);
 
         //---- addIncomeButton ----
-        JButton addIncomeButton = new JButton("Add Income");
+        JButton addIncomeButton = new JButton("Add income");
         buttonPanel.add(addIncomeButton);
         buttonPanel.add(vspacer2);
+        addIncomeButton.setActionCommand("Add income");
+        addIncomeButton.addActionListener(this);
 
         //---- filterButton ----
         JButton filterButton = new JButton("Filter");
         buttonPanel.add(filterButton);
         buttonPanel.add(vspacer3);
+        filterButton.setActionCommand("Filter");
+        filterButton.addActionListener(this);
 
         // Save/exit button
         JButton saveExitButton = new JButton("Save/Exit");
         buttonPanel.add(saveExitButton);
+        saveExitButton.setActionCommand("Save/Exit");
+        saveExitButton.addActionListener(this);
 
         pane.add(buttonPanel);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        switch (e.getActionCommand()) {
+            case "Add expense":
+                new AddExpenseWindow(this);
+                break;
+            case "Add income":
+                addIncomeToTable();
+                break;
+            case "Filter":
+                filterTransactions();
+                break;
+            case "Save/Exit":
+                new SaveExitWindow(this).setVisible(true);
+                break;
+        }
+    }
+
+    private void addExpenseToTable() {
+    }
+
+    private void addIncomeToTable() {
+    }
+
+    private void filterTransactions() {
     }
 
     private void createDetailPanel(Container pane) {
@@ -180,7 +235,7 @@ public class BudgetAppGUI extends JFrame {
         budgetPanel.setBorder(BorderFactory.createBevelBorder(1));
         budgetPanel.setLayout(new GridLayout());
 
-        JTable budgetTable = new JTable();
+
         JScrollPane scrollPane = new JScrollPane();
 
         budgetPanel.setBorder(new javax.swing.border.CompoundBorder(BorderFactory.createBevelBorder(1),
@@ -188,7 +243,31 @@ public class BudgetAppGUI extends JFrame {
                         javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP,
                         new Font("Arial",Font.BOLD,14), Color.blue)));
 
+        String[] columnNames = {"Type",
+                "Category",
+                "Description",
+                "Amount",
+                "Date?"};
+
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+
+        JTable table = new JTable(model);
+        Object[][] data = {
+                {"Kathy", "Smith",
+                        "Snowboarding",5, false},
+                {"John", "Doe",
+                        "Rowing", new Integer(3), new Boolean(true)},
+                {"Sue", "Black",
+                        "Knitting", new Integer(2), new Boolean(false)},
+                {"Jane", "White",
+                        "Speed reading", new Integer(20), new Boolean(true)},
+                {"Joe", "Brown",
+                        "Pool", new Integer(10), new Boolean(false)}
+        };
+
+        JTable budgetTable = new JTable(data, columnNames);
         budgetTable.setColumnSelectionAllowed(true);
+        budgetTable.setFillsViewportHeight(true);
         scrollPane.setViewportView(budgetTable);
 
         budgetPanel.add(scrollPane);
