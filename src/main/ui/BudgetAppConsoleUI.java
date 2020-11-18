@@ -6,6 +6,7 @@ import persistence.JsonWriter;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,6 +18,10 @@ public class BudgetAppConsoleUI {
     private User user;
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
+    private EnumSet<Category> costCategories = EnumSet.of(Category.BILLS,Category.DEBT_REPAYMENTS,
+            Category.ONE_TIME_EXPENSES, Category.MISCELLANEOUS_PURCHASES, Category.FOR_FUN);
+    private EnumSet<Category> fundCategories = EnumSet.of(Category.EMPLOYMENT,Category.LOAN, Category.GIFT,
+            Category.OTHER);
 
     // EFFECTS: runs console-based UI of budget application
     public static void main(String[] args) {
@@ -117,7 +122,7 @@ public class BudgetAppConsoleUI {
     // MODIFIES: this
     // EFFECTS: adds a cost to user's list of expenses
     public void addCost() {
-        CostCategory category = readCostCategory();
+        Category category = readCostCategory();
         System.out.print("\tEnter cost description: ");
         String description = (input.next() + input.nextLine());
         System.out.print("\tEnter amount of cost: $");
@@ -131,49 +136,42 @@ public class BudgetAppConsoleUI {
     }
 
     // EFFECTS: prompts user to select category for their cost and returns it
-    private CostCategory readCostCategory() {
+    private Category readCostCategory() {
         System.out.println("\nPlease select a category for your cost:\n");
 
         int menuLabel = 1;
-        for (CostCategory c : CostCategory.values()) {
-            System.out.println("\t" + menuLabel + " -> " + getCostCatString(c));
+        for (Category c : costCategories) {
+            System.out.println("\t" + menuLabel + " -> " + Category.getCatString(c));
             menuLabel++;
         }
 
         int menuSelection = input.nextInt();
-        return CostCategory.values()[menuSelection - 1];
-    }
+        Category cat;
 
-    // EFFECTS: converts CostCategory to more appealing string
-    public String getCostCatString(CostCategory c) {
-        String catString = "";
-
-        switch (c) {
-            case BILLS:
-                catString = "Bills";
+        switch (menuSelection) {
+            case 1:
+                cat = Category.BILLS;
                 break;
-            case DEBT_REPAYMENTS:
-                catString = "Debt repayments";
+            case 2:
+                cat = Category.DEBT_REPAYMENTS;
                 break;
-            case ONE_TIME_EXPENSES:
-                catString = "One-time expenses";
+            case 3:
+                cat = Category.ONE_TIME_EXPENSES;
                 break;
-            case MISCELLANEOUS_PURCHASES:
-                catString = "Miscellaneous expenses";
+            case 4:
+                cat = Category.MISCELLANEOUS_PURCHASES;
                 break;
-            case FOR_FUN:
-                catString = "For fun!";
+            default:
+                cat = Category.FOR_FUN;
                 break;
         }
-
-        return catString;
+        return cat;
     }
-
 
     // MODIFIES: this
     // EFFECTS: adds a fund to user's list of incomes
     public void addFund() {
-        FundCategory category = readFundCategory();
+        Category category = readFundCategory();
         System.out.print("\tEnter income description: ");
         String description = (input.next() + input.nextLine());
         System.out.print("\tEnter amount of income: $");
@@ -187,39 +185,33 @@ public class BudgetAppConsoleUI {
     }
 
     // EFFECTS: prompts user to select category for their source of income and returns it
-    private FundCategory readFundCategory() {
+    private Category readFundCategory() {
         System.out.println("Please select a category for your source of income");
 
         int menuLabel = 1;
-        for (FundCategory f : FundCategory.values()) {
-            System.out.println("\t" + menuLabel + " -> " + getFundCatString(f));
+        for (Category f : fundCategories) {
+            System.out.println("\t" + menuLabel + " -> " + Category.getCatString(f));
             menuLabel++;
         }
 
         int menuSelection = input.nextInt();
-        return FundCategory.values()[menuSelection - 1];
-    }
+        Category cat;
 
-    // EFFECTS: converts FundCategory to more appealing string
-    public String getFundCatString(FundCategory f) {
-        String catString = "";
-
-        switch (f) {
-            case EMPLOYMENT:
-                catString = "Employment";
+        switch (menuSelection) {
+            case 1:
+                cat = Category.EMPLOYMENT;
                 break;
-            case LOAN:
-                catString = "Loans";
+            case 2:
+                cat = Category.LOAN;
                 break;
-            case GIFT:
-                catString = "Gifts";
+            case 3:
+                cat = Category.GIFT;
                 break;
-            case OTHER:
-                catString = "Other";
+            default:
+                cat = Category.OTHER;
                 break;
         }
-
-        return catString;
+        return cat;
     }
 
     // EFFECTS: prompts user to enter 'totals', 'balance', 'expenses', 'or income' to view details of their budget

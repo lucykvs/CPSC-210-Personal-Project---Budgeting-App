@@ -17,7 +17,7 @@ public class Income {
     // REQUIRES: amount >= 0
     // MODIFIES: this
     // EFFECTS: adds a new income to the collection of incomes to be counted
-    public void addFund(FundCategory category, String description, double amount) {
+    public void addFund(Category category, String description, double amount) {
         Fund f = new Fund(category, description, amount);
         income.add(f);
     }

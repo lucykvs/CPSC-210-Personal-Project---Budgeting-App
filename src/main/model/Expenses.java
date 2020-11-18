@@ -7,7 +7,7 @@ import java.util.List;
 
 // Represents a collection of costs comprising a budget's expenses
 public class Expenses {
-    private List<Cost> expenses;
+    private ArrayList<Cost> expenses;
 
     // EFFECTS: constructs an empty collection of costs
     public Expenses() {
@@ -17,7 +17,7 @@ public class Expenses {
     // REQUIRES: amount >= 0
     // MODIFIES: this
     // EFFECTS: adds a new cost to the collection of expenses
-    public void addCost(CostCategory category, String description, double amount) {
+    public void addCost(Category category, String description, double amount) {
         Cost c = new Cost(category, description, amount);
         expenses.add(c);
     }
@@ -45,7 +45,7 @@ public class Expenses {
     }
 
     // EFFECTS: returns list of costs in expenses
-    public List<Cost> getCosts() {
+    public ArrayList<Cost> getCosts() {
         return expenses;
     }
 

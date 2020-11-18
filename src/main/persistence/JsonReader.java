@@ -46,6 +46,7 @@ public class JsonReader {
         User user = new User(username);
         addExpenses(user, jsonObject);
         addIncomes(user, jsonObject);
+        addTransactions(user, jsonObject);
         return user;
     }
 
@@ -70,9 +71,19 @@ public class JsonReader {
     }
 
     // MODIFIES: user
+    // EFFECTS: parses incomes from JSON object and adds them to user's budget
+    private void addTransactions(User user, JSONObject jsonObject) {
+        JSONArray jsonArray = jsonObject.getJSONArray("transactions");
+        for (Object json : jsonArray) {
+            JSONObject nextTransaction = (JSONObject) json;
+            addTransaction(user, nextTransaction);
+        }
+    }
+
+    // MODIFIES: user
     // EFFECTS: parses cost from JSON object and adds it to user's budget
     private void addCost(User user, JSONObject jsonObject) {
-        CostCategory category = CostCategory.valueOf(jsonObject.getString("category"));
+        Category category = Category.valueOf(jsonObject.getString("category"));
         String description = jsonObject.getString("description");
         double amount = jsonObject.getDouble("amount");
         Cost cost = new Cost(category, description, amount);
@@ -82,10 +93,20 @@ public class JsonReader {
     // MODIFIES: user
     // EFFECTS: parses fund from JSON object and adds it to user's income
     private void addFund(User user, JSONObject jsonObject) {
-        FundCategory category = FundCategory.valueOf(jsonObject.getString("category"));
+        Category category = Category.valueOf(jsonObject.getString("category"));
         String description = jsonObject.getString("description");
         double amount = jsonObject.getDouble("amount");
         Fund fund = new Fund(category, description, amount);
         user.addFund(fund);
+    }
+
+    // MODIFIES: user
+    // EFFECTS: parses fund from JSON object and adds it to user's income
+    private void addTransaction(User user, JSONObject jsonObject) {
+        Category category = Category.valueOf(jsonObject.getString("category"));
+        String description = jsonObject.getString("description");
+        double amount = jsonObject.getDouble("amount");
+        Transaction transaction = new Transaction(category, description, amount);
+        user.addTransaction(transaction);
     }
 }

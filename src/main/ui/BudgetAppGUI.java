@@ -1,11 +1,14 @@
 package ui;
 
+import model.Category;
+import model.Cost;
+import model.Transaction;
 import model.User;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 import ui.tools.AddExpenseWindow;
+import ui.tools.AddIncomeWindow;
 import ui.tools.SaveExitWindow;
-import ui.tools.StartUpWindow;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -13,21 +16,23 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowStateListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.EnumSet;
 
 public class BudgetAppGUI extends JFrame implements ActionListener {
     private JPanel userPanel;
     private JPanel detailPanel;
     private JPanel buttonPanel;
     private JPanel budgetPanel;
-    private static final String JSON_STORE = "./data/budget.json";
-    private JsonWriter jsonWriter;
-    private JsonReader jsonReader;
     private static User user;
+
+    private EnumSet<Category> costCategories = EnumSet.of(Category.BILLS,Category.DEBT_REPAYMENTS,
+            Category.ONE_TIME_EXPENSES, Category.MISCELLANEOUS_PURCHASES, Category.FOR_FUN);
+    private EnumSet<Category> fundCategories = EnumSet.of(Category.EMPLOYMENT,Category.LOAN, Category.GIFT,
+            Category.OTHER);
 
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
@@ -36,6 +41,7 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
     public BudgetAppGUI() {
         super("Budget Application");
         initializeGraphics();
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
     // MODIFIES: this
@@ -75,7 +81,6 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         setVerticalGroup(contentPaneLayout);
 
         pack();
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(getOwner());
     }
 
@@ -191,15 +196,17 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         switch (e.getActionCommand()) {
             case "Add expense":
                 new AddExpenseWindow(this);
+                addExpenseToTable();
                 break;
             case "Add income":
+                new AddIncomeWindow(this);
                 addIncomeToTable();
                 break;
             case "Filter":
                 filterTransactions();
                 break;
             case "Save/Exit":
-                new SaveExitWindow(this).setVisible(true);
+                new SaveExitWindow(this);
                 break;
         }
     }
@@ -246,24 +253,21 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         String[] columnNames = {"Type",
                 "Category",
                 "Description",
-                "Amount",
-                "Date?"};
+                "Amount"};
 
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-
-        JTable table = new JTable(model);
-        Object[][] data = {
-                {"Kathy", "Smith",
-                        "Snowboarding",5, false},
-                {"John", "Doe",
-                        "Rowing", new Integer(3), new Boolean(true)},
-                {"Sue", "Black",
-                        "Knitting", new Integer(2), new Boolean(false)},
-                {"Jane", "White",
-                        "Speed reading", new Integer(20), new Boolean(true)},
-                {"Joe", "Brown",
-                        "Pool", new Integer(10), new Boolean(false)}
-        };
+       Object[][] data = getArrayOfCostDetails();
+//        {
+//                {"Kathy", "Smith",
+//                        "Snowboarding",5, false},
+//                {"John", "Doe",
+//                        "Rowing", new Integer(3), new Boolean(true)},
+//                {"Sue", "Black",
+//                        "Knitting", new Integer(2), new Boolean(false)},
+//                {"Jane", "White",
+//                        "Speed reading", new Integer(20), new Boolean(true)},
+//                {"Joe", "Brown",
+//                        "Pool", new Integer(10), new Boolean(false)}
+//        };
 
         JTable budgetTable = new JTable(data, columnNames);
         budgetTable.setColumnSelectionAllowed(true);
@@ -272,5 +276,33 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
 
         budgetPanel.add(scrollPane);
         pane.add(budgetPanel);
+    }
+
+    private Object[][] getArrayOfCostDetails() {
+        ArrayList<Transaction> transactions = user.getTransactions().getTransactions();
+
+        Object[][] costs = new Object[transactions.size()][];
+
+        int i = 0;
+        String type;
+
+        for (Transaction t : transactions) {
+
+            if (costCategories.contains(t.getCategory())) {
+                type = "Expenses";
+            } else {
+                type = "Income";
+            }
+
+            String category = Category.getCatString(t.getCategory());
+            String description = t.getDescription();
+            Double amount = t.getAmount();
+
+            Object[] cost = {type, category, description, amount};
+            costs[i] = cost;
+            i++;
+        }
+
+        return costs;
     }
 }

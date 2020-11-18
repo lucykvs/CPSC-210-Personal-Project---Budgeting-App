@@ -1,7 +1,5 @@
 package ui.tools;
 
-import model.Budget;
-import model.User;
 import persistence.JsonWriter;
 import ui.BudgetAppGUI;
 
@@ -60,7 +58,7 @@ public class SaveExitWindow extends JFrame implements ActionListener {
 
         add(panel);
         pack();
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setSize(200, 250);
         setVisible(true);
@@ -71,14 +69,17 @@ public class SaveExitWindow extends JFrame implements ActionListener {
         switch (e.getActionCommand()) {
             case "Save":
                 saveUser();
+                dispose();
                 break;
             case "Save and exit":
                 saveUser();
                 dispose();
                 budgetAppGUI.dispose();
+                System.exit(0);
             case "Exit":
                 dispose();
                 budgetAppGUI.dispose();
+                System.exit(0);
         }
     }
 
@@ -107,9 +108,4 @@ public class SaveExitWindow extends JFrame implements ActionListener {
         savedMessage.setVisible(true);
     }
 }
-        //userMessage.add(new JLabel("Successfully created new user: " + user.getName() + "."));
-        //userMessage.setSize(100,100);
-        //dispose();
-        //new BudgetAppGUI().setVisible(true);
-
 
