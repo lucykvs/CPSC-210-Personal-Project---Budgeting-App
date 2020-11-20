@@ -10,18 +10,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 
+// Represents window that displays save/exit options
 public class SaveExitWindow extends JFrame implements ActionListener {
     private static final String JSON_STORE = "./data/budget.json";
     private JsonWriter jsonWriter;
     private JDialog saveExitPopup;
     protected BudgetAppGUI budgetAppGUI;
 
+    // EFFECTS: constructs new save and exit window
     public SaveExitWindow(BudgetAppGUI budgetAppGUI) {
         super("Save/Exit");
         this.budgetAppGUI = budgetAppGUI;
         initializePanel();
     }
 
+    // EFFECTS: creates panels for layout of save exit window
     private void initializePanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(new EmptyBorder(1, 1, 1, 1));
@@ -32,6 +35,7 @@ public class SaveExitWindow extends JFrame implements ActionListener {
         setPanelBehaviour(btnPanel, layout, panel);
     }
 
+    // EFFECTS: creates and adds buttons for save/exit options to this window's panel
     private void createButtons(JPanel btnPanel) {
         JLabel saveExitMessage = new JLabel("Save current user?");
 
@@ -50,6 +54,7 @@ public class SaveExitWindow extends JFrame implements ActionListener {
         addButtonsToPanel(btnPanel, saveExitMessage, saveButton, saveAndExitButton, exitButton);
     }
 
+    // EFFECTS: adds save/exit buttons to panel
     private void addButtonsToPanel(JPanel btnPanel, JLabel saveExitMessage, JButton saveButton,
                                    JButton saveAndExitButton, JButton exitButton) {
         JPanel vspace1 = new JPanel(null);
@@ -65,6 +70,7 @@ public class SaveExitWindow extends JFrame implements ActionListener {
         btnPanel.add(exitButton);
     }
 
+    // EFFECTS: sets graphic details of window and its panels
     private void setPanelBehaviour(JPanel btnPanel, JPanel layout, JPanel panel) {
         layout.add(btnPanel);
         panel.add(layout, BorderLayout.CENTER);
@@ -77,6 +83,7 @@ public class SaveExitWindow extends JFrame implements ActionListener {
         setVisible(true);
     }
 
+    // EFFECTS: handles button clicks of save/exit buttons
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
@@ -110,6 +117,7 @@ public class SaveExitWindow extends JFrame implements ActionListener {
         }
     }
 
+    // EFFECTS: prints message when user is saved successfully
     private void savedMessage() {
         JDialog savedMessage = new JDialog();
 

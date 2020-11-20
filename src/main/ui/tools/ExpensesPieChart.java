@@ -5,15 +5,18 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 import ui.BudgetAppGUI;
 
+// Represents window that constructs and displays expenses pie chart
 public class ExpensesPieChart extends PieChartWindow {
     private String title;
 
+    // Constructs new expenses pie chart
     public ExpensesPieChart(BudgetAppGUI budgetAppGUI) {
         super(budgetAppGUI);
         title = "Expenses";
         setContentPane(createChartPanel(title));
     }
 
+    // EFFECTS: creates dataSet of expenses to be displayed in chart
     @Override
     PieDataset createDataSet() {
         DefaultPieDataset dataSet = new DefaultPieDataset();

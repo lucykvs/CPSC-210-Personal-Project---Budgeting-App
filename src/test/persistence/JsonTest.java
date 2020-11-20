@@ -1,6 +1,5 @@
 package persistence;
 
-
 import model.Category;
 import model.Transaction;
 

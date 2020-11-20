@@ -1,11 +1,8 @@
 package model;
 
-import org.json.JSONObject;
 import persistence.Writable;
 
-import java.util.EnumSet;
-
-// Represents a cost having a brief description and total amount in dollars
+// Represents a cost having a category, description, total amount, and type expense
 public class Cost extends Transaction implements Writable {
 
     // EFFECTS: constructs a cost with an associated category, description, and amount

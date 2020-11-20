@@ -4,43 +4,46 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
+// Represents a transaction having a category, description, and amount
 public abstract class Transaction {
     private String description;
     private double amount;
     private Category category;
     private String type;
 
-    // EFFECTS: constructs an income with an associated description and amount
+    // EFFECTS: constructs a transaction with an associated category, description, and amount
     public Transaction(Category category, String description, double amount) {
         this.category = category;
         this.description = description;
         this.amount = amount;
     }
 
-    // EFFECTS: returns category of this income source
+    // EFFECTS: returns category of this transaction
     public Category getCategory() {
         return category;
     }
 
-    // EFFECTS: returns description of this income source
+    // EFFECTS: returns description of this transaction
     public String getDescription() {
         return description;
     }
 
-    // EFFECTS: returns amount in dollars of this income source
+    // EFFECTS: returns amount in dollars of this transaction
     public double getAmount() {
         return amount;
     }
 
+    // EFFECTS: sets type of this transaction
     protected void setType(String type) {
         this.type = type;
     }
 
+    // EFFECTS: returns type of this transaction
     public String getType() {
         return type;
     }
 
-    // EFFECTS: returns JSON representation of cost
+    // EFFECTS: returns JSON representation of transaction
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("category", category);
@@ -50,6 +53,7 @@ public abstract class Transaction {
         return json;
     }
 
+    // Override hashcode and equals for desired equality of transactions when GUI's remove functionality is used
     @Override
     public boolean equals(Object o) {
         if (this == o) {

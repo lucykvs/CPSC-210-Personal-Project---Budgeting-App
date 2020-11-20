@@ -2,7 +2,6 @@ package ui.tools;
 
 import model.User;
 import persistence.JsonReader;
-import persistence.JsonWriter;
 import ui.BudgetAppGUI;
 
 import javax.swing.*;
@@ -12,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
+// Represents window that opens on startup and displays user's options
 public class StartUpWindow extends JFrame implements ActionListener {
     private JButton createNew;
     private JButton loadUser;
@@ -22,6 +22,7 @@ public class StartUpWindow extends JFrame implements ActionListener {
     private JsonReader jsonReader;
     private JDialog userMessage;
 
+    // EFFECTS: constructs startup window
     public StartUpWindow() {
         super("Budget Application");
         JPanel panel = new JPanel(new BorderLayout());
@@ -34,6 +35,7 @@ public class StartUpWindow extends JFrame implements ActionListener {
         setPanelBehaviour(layout, panel, btnPanel);
     }
 
+    // EFFECTS: creates and adds buttons for load/create options to this window's panel
     private void initializeGraphics() {
         openingMessage = new JLabel("Welcome to your budgeting application! Select an option:");
 
@@ -53,6 +55,7 @@ public class StartUpWindow extends JFrame implements ActionListener {
         add(loadDemoUser);
     }
 
+    // EFFECTS: adds load/create buttons to panel
     private void addButtonsToPanel(JPanel btnPanel) {
         JPanel vspace1 = new JPanel(null);
         JPanel vspace2 = new JPanel(null);
@@ -67,6 +70,7 @@ public class StartUpWindow extends JFrame implements ActionListener {
         btnPanel.add(loadDemoUser);
     }
 
+    // EFFECTS: sets graphic details of window and its panels
     private void setPanelBehaviour(JPanel layout, JPanel panel, JPanel btnPanel) {
         layout.add(btnPanel);
         panel.add(layout, BorderLayout.CENTER);
@@ -79,6 +83,7 @@ public class StartUpWindow extends JFrame implements ActionListener {
         setVisible(true);
     }
 
+    // EFFECTS: handles button clicks of load/create buttons
     @Override
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
@@ -92,6 +97,8 @@ public class StartUpWindow extends JFrame implements ActionListener {
         }
     }
 
+    // MODIFIES: budgetAppGUI
+    // EFFECTS: creates new user when create new button is clicked
     public void createNewUser() {
         userMessage = new JDialog();
 
@@ -113,7 +120,7 @@ public class StartUpWindow extends JFrame implements ActionListener {
     }
 
     // MODIFIES: this
-    // EFFECTS: loads previous user from file
+    // EFFECTS: loads previous user from file when load button is clicked
     public void loadPreviousUser() {
         jsonReader = new JsonReader(JSON_STORE);
 
@@ -135,7 +142,7 @@ public class StartUpWindow extends JFrame implements ActionListener {
     }
 
     // MODIFIES: this
-    // EFFECTS: loads demo user from file
+    // EFFECTS: loads demo user from file when load demo button is clicked
     public void loadDemoUser() {
         jsonReader = new JsonReader(JSON_DEMO);
 

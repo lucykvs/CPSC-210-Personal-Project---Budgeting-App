@@ -4,14 +4,15 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
 
-// Represents a user with a username and a budget
+// Represents a user with a username and associated budget
 public class User implements Writable {
-    public String name;                   //username of account user
+    public String name;
     public Transactions income;
     public Transactions expenses;
     public Transactions allTransactions;
 
-    // EFFECTS: Constructs a user with given username and an empty budget
+    // EFFECTS: Constructs a user with given username and empty budget with transactions objects:
+    //          income, expenses, and allTransactions
     public User(String username) {
         name = username;
         income = new Transactions();
@@ -40,6 +41,7 @@ public class User implements Writable {
         return (income.getTotalTransactions() - expenses.getTotalTransactions());
     }
 
+    // EFFECTS: returns all transactions in this user's budget
     public Transactions getAllTransactions() {
         return allTransactions;
     }
@@ -55,30 +57,33 @@ public class User implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: adds a cost to user's expenses
+    // EFFECTS: adds a cost to user's expenses, and adds this cost to allTransactions
     public void addCost(Category category, String description, double amount) {
         expenses.addCost(category, description, amount);
         addToAllTransactions(new Cost(category, description, amount));
     }
 
     // MODIFIES: this
-    // EFFECTS: adds a fund to user's income
+    // EFFECTS: adds a fund to user's income, and adds this fund to allTransactions
     public void addFund(Category category, String description, double amount) {
         income.addFund(category, description, amount);
         addToAllTransactions(new Fund(category, description, amount));
     }
 
+    // EFFECTS: adds transaction to allTransactions
     public void addToAllTransactions(Transaction transaction) {
         allTransactions.addTransaction(transaction);
     }
 
+    // EFFECTS: if specified transaction is in expenses or income, removes transaction from expenses or income, and if
+    //          specified transaction is in allTransactions, removes transaction and returns true; else returns false
     public boolean removeTransaction(Transaction transaction) {
         expenses.removeTransaction(transaction);
         income.removeTransaction(transaction);
         return allTransactions.removeTransaction(transaction);
     }
 
-    // EFFECTS: returns JSON representation of user
+    // EFFECTS: returns JSON representation of this user
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
@@ -87,7 +92,7 @@ public class User implements Writable {
         return json;
     }
 
-    // EFFECTS: returns expenses in this user's budget as a JSON array
+    // EFFECTS: returns transactions in this user's budget as a JSON array
     private JSONArray transactionsToJson() {
         JSONArray jsonArray;
 

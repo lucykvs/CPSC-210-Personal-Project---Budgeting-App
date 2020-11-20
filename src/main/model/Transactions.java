@@ -5,30 +5,31 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.List;
 
+// Represents a list of transactions
 public class Transactions {
-//    private User user;
     private ArrayList<Transaction> transactions;
 
     // EFFECTS: constructs an empty collection of costs
     public Transactions() {
         transactions = new ArrayList<>();
-//        this.user = user;
     }
 
-    // REQUIRES: amount >= 0
     // MODIFIES: this
-    // EFFECTS: adds a new transaction to the collection of transactions
+    // EFFECTS: adds a given transaction to the collection of transactions
     public void addTransaction(Transaction t) {
         transactions.add(t);
     }
 
+    // MODIFIES: this
+    // EFFECTS: if given transaction is in transactions, removes transaction from this and returns true; if not in this,
+    //          returns false
     public boolean removeTransaction(Transaction t) {
         return transactions.remove(t);
     }
 
     // REQUIRES: amount >= 0
     // MODIFIES: this
-    // EFFECTS: adds a new transaction to the collection of transactions
+    // EFFECTS: adds a new cost to the collection of transactions
     public void addCost(Category category, String description, double amount) {
         Transaction t = new Cost(category, description, amount);
         transactions.add(t);
@@ -36,12 +37,13 @@ public class Transactions {
 
     // REQUIRES: amount >= 0
     // MODIFIES: this
-    // EFFECTS: adds a new transaction to the collection of transactions
+    // EFFECTS: adds a new fund to the collection of transactions
     public void addFund(Category category, String description, double amount) {
         Transaction t = new Fund(category, description, amount);
         transactions.add(t);
     }
 
+    // EFFECTS: returns total amount of this transactions
     public double getTotalTransactions() {
         double total = 0;
 
@@ -52,8 +54,7 @@ public class Transactions {
     }
 
     // MODIFIES: this
-    // EFFECTS: returns list of the descriptions of those transactions in list of expenses;
-    // list returned can be empty.
+    // EFFECTS: returns list of the descriptions of transactions in this transactions; list returned can be empty
     public List<String> getAllTransactionDescriptions() {
         List<String> descriptions = new ArrayList<>();
 
@@ -63,7 +64,7 @@ public class Transactions {
         return descriptions;
     }
 
-    // EFFECTS: returns list of costs in expenses
+    // EFFECTS: returns list of transactions in this transactions
     public ArrayList<Transaction> getTransactions() {
         return transactions;
     }

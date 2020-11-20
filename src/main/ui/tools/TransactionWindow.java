@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+// Represents a window in which details of a transaction can be entered
 public abstract class TransactionWindow implements ActionListener {
     protected BudgetAppGUI budgetAppGUI;
     protected JComboBox<String> categoryOptions;
@@ -36,13 +37,15 @@ public abstract class TransactionWindow implements ActionListener {
     private String typeCapitalized;
     private String[] catOptions;
 
-
+    // Constructs a window where transaction details can be entered
     public TransactionWindow(BudgetAppGUI budgetAppGUI, String title, String type) {
         frame = new JFrame(title);
         this.type = type;
         this.budgetAppGUI = budgetAppGUI;
     }
 
+    // MODIFIES: this
+    // EFFECTS: initializes layout of TransactionWindow
     protected void initializePanelSetup(String[] catOptions) {
         this.catOptions = catOptions;
 
@@ -54,6 +57,8 @@ public abstract class TransactionWindow implements ActionListener {
         initializePanelGraphics();
     }
 
+    // MODIFIES: this
+    // EFFECTS: adds graphics component to frame
     protected void initializePanelGraphics() {
         String l1 = type.substring(0, 1).toUpperCase();
         typeCapitalized = l1 + type.substring(1);
@@ -74,6 +79,7 @@ public abstract class TransactionWindow implements ActionListener {
         frame.setVisible(true);
     }
 
+    // EFFECTS: creates labels and buttons to add to frame
     protected void createLabelsAndButtons() {
         addTransactionMessage = new JLabel(typeCapitalized + " details:");
         vspace = new JPanel(null);
@@ -98,6 +104,7 @@ public abstract class TransactionWindow implements ActionListener {
         }
     }
 
+    // EFFECTS: gets details of transaction entered when add button is pressed
     protected void getTransactionDetailsFromTransactionWindow(ActionEvent e) {
         if (e.getActionCommand().equals("Add") || e.getActionCommand().equals("Remove")) {
 
@@ -107,6 +114,8 @@ public abstract class TransactionWindow implements ActionListener {
         }
     }
 
+    // MODIFIES: budgetTable
+    // EFFECTS: updates budgetTable with new transaction in budgetAppGUI
     protected void updateUIWithTransactionFromDetailsEntered(String listType) {
         budgetAppGUI.updateTableWithAddedTransaction();
         playAddTransactionSound();
@@ -116,6 +125,8 @@ public abstract class TransactionWindow implements ActionListener {
         responseMessage("Successfully added " + type + " to your list of " + listType + ".");
     }
 
+    // MODIFIES: budgetTable
+    // EFFECTS: updates budgetTable with transaction to be removed
     protected void removeTransactionFromDetailsEntered(Transaction t, String listType) {
         if (budgetAppGUI.updateTableWithRemovedTransaction(t)) {
             responseMessage("Successfully removed " + type + " from your list of " + listType + ".");
@@ -125,6 +136,7 @@ public abstract class TransactionWindow implements ActionListener {
         frame.dispose();
     }
 
+    // EFFECTS: plays cash register sound when transaction is added
     protected void playAddTransactionSound() {
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
@@ -139,6 +151,7 @@ public abstract class TransactionWindow implements ActionListener {
         }
     }
 
+    // EFFECTS: generates success or failure message after transaction is added or removed
     protected void responseMessage(String message) {
         JDialog successMessage = new JDialog();
 
@@ -148,6 +161,8 @@ public abstract class TransactionWindow implements ActionListener {
         successMessage.setVisible(true);
     }
 
+    // MODIFIES: btnPanel
+    // EFFECTS: adds labels and text fields to panel of transaction window
     protected void addFeaturesToButtonPanel() {
         btnPanel.add(addTransactionMessage);
         btnPanel.add(vspace);
@@ -168,6 +183,7 @@ public abstract class TransactionWindow implements ActionListener {
         }
     }
 
+    // EFFECTS: sets location bounds of labels and text fields in this window
     protected void setFeatureBounds() {
         addTransactionMessage.setBounds(10, 20, 80, 25);
         vspace.setBounds(10, 45, 80, 20);

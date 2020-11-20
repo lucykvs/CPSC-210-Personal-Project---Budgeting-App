@@ -16,7 +16,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.EnumSet;
 
 public class BudgetAppGUI extends JFrame implements ActionListener {
     private JPanel userPanel;
@@ -26,19 +25,18 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
     private JTable budgetTable;
     private DefaultTableModel tableModel;
     private static User user;
-    private String[] columnNames;
     private Object[][] transactionArray;
     private Container pane;
-
-    private EnumSet<Category> costCategories = EnumSet.of(Category.BILLS,Category.DEBT_REPAYMENTS,
-            Category.ONE_TIME_EXPENSES, Category.MISCELLANEOUS_PURCHASES, Category.FOR_FUN);
-    private EnumSet<Category> fundCategories = EnumSet.of(Category.EMPLOYMENT,Category.LOAN, Category.GIFT,
-            Category.OTHER);
 
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
 
-    // EFFECTS: runs the budget application
+    // EFFECTS: runs GUI of budget application
+    public static void main(String[] args) {
+        new StartUpWindow().setVisible(true);
+    }
+
+    // EFFECTS: runs the main budget application frame
     public BudgetAppGUI() {
         super("Budget Application");
         initializeGraphics();
@@ -46,8 +44,7 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
     }
 
     // MODIFIES: this
-    // EFFECTS: draws the JFrame window where this BudgetApp will operate, and adds the buttons to be used to add to
-    //          this budget
+    // EFFECTS: draws the JFrame window where this BudgetApp will operate, and adds components that make up app
     private void initializeGraphics() {
         pane = getContentPane();
 
@@ -56,18 +53,25 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         pack();
     }
 
+    // MODIFIES: this
+    // EFFECTS: sets this user to new user with given username
     public static void setUser(String username) {
         user = new User(username);
     }
 
+    // MODIFIES: this
+    // EFFECTS: sets this user to given user
     public static void setUser(User previousUser) {
         user = previousUser;
     }
 
+    // EFFECTS: returns this user
     public User getUser() {
         return user;
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates panels that make up app frame
     public void addComponentsToPane() {
         createUserPanel();
         createDetailPanel();
@@ -76,6 +80,8 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         setContentPaneLayout();
     }
 
+    // MODIFIES: this
+    // EFFECTS: sets layout of main application frame
     private void setContentPaneLayout() {
         GroupLayout contentPaneLayout = new GroupLayout(pane);
 
@@ -87,6 +93,8 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         setLocationRelativeTo(getOwner());
     }
 
+    // MODIFIES: this
+    // EFFECTS: sets vertical group layout of panels on frame in correct orientation
     private void setVerticalGroup(GroupLayout contentPaneLayout) {
         contentPaneLayout.setVerticalGroup(
                 contentPaneLayout.createParallelGroup()
@@ -103,6 +111,8 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         );
     }
 
+    // MODIFIES: this
+    // EFFECTS: sets horizontal group layout of panels on frame in correct orientation
     private void setHorizontalGroup(GroupLayout contentPaneLayout) {
         contentPaneLayout.setHorizontalGroup(
                 contentPaneLayout.createParallelGroup()
@@ -120,6 +130,8 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         );
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates panel with username and app photo
     private void createUserPanel() {
         userPanel = new JPanel();
         userPanel.setMinimumSize(new Dimension(80, HEIGHT / 4));
@@ -136,6 +148,8 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         pane.add(userPanel);
     }
 
+    // MODIFIES: userPanel
+    // EFFECTS: loads app photo from file and adds to userPanel
     private void addUserPhoto() {
         try {
             BufferedImage fullSizeUserPic = ImageIO.read(new File("./data/budgetImage2.png"));
@@ -150,7 +164,8 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         }
     }
 
-    // MODIFIES:
+    // MODIFIES: buttonPanel
+    // EFFECTS: sets up border, layout, and components of buttonPanel
     private void createButtonPanel() {
         buttonPanel = new JPanel();
         buttonPanel.setBorder(BorderFactory.createBevelBorder(1));
@@ -165,12 +180,12 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         createRemoveExpenseButton(vspacer2);
         createAddIncomeButton(vspacer3);
         createRemoveIncomeButton(vspacer4);
-        //createFilterButton(vspacer3);
         createSaveExitButton();
     }
 
+    // MODIFIES: buttonPanel
+    // EFFECTS: creates button for adding expenses
     private void createAddExpenseButton(JPanel vspacer1) {
-        //---- addExpenseButton ----
         JButton addExpenseButton = new JButton("Add expense");
         buttonPanel.add(addExpenseButton);
         buttonPanel.add(vspacer1);
@@ -178,8 +193,9 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         addExpenseButton.addActionListener(this);
     }
 
+    // MODIFIES: buttonPanel
+    // EFFECTS: creates button for removing expenses
     private void createRemoveExpenseButton(JPanel vspacer2) {
-        //---- removeExpenseButton ----
         JButton removeExpenseButton = new JButton("Remove expense");
         buttonPanel.add(removeExpenseButton);
         buttonPanel.add(vspacer2);
@@ -187,8 +203,9 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         removeExpenseButton.addActionListener(this);
     }
 
+    // MODIFIES: buttonPanel
+    // EFFECTS: creates button for adding income
     private void createAddIncomeButton(JPanel vspacer3) {
-        //---- addIncomeButton ----
         JButton addIncomeButton = new JButton("Add income");
         buttonPanel.add(addIncomeButton);
         buttonPanel.add(vspacer3);
@@ -196,8 +213,9 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         addIncomeButton.addActionListener(this);
     }
 
+    // MODIFIES: buttonPanel
+    // EFFECTS: creates button for removing income
     private void createRemoveIncomeButton(JPanel vspacer4) {
-        //---- removeIncomeButton ----
         JButton removeIncomeButton = new JButton("Remove income");
         buttonPanel.add(removeIncomeButton);
         buttonPanel.add(vspacer4);
@@ -205,17 +223,9 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         removeIncomeButton.addActionListener(this);
     }
 
-//    private void createFilterButton(JPanel vspacer3) {
-//        //---- filterButton ----
-//        JButton filterButton = new JButton("Filter");
-//        buttonPanel.add(filterButton);
-//        buttonPanel.add(vspacer3);
-//        filterButton.setActionCommand("Filter");
-//        filterButton.addActionListener(this);
-//    }
-
+    // MODIFIES: buttonPanel
+    // EFFECTS: creates button to open SaveExitWindow
     private void createSaveExitButton() {
-        // Save/exit button
         JButton saveExitButton = new JButton("Save/Exit");
         buttonPanel.add(saveExitButton);
         saveExitButton.setActionCommand("Save/Exit");
@@ -224,33 +234,36 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         pane.add(buttonPanel);
     }
 
+    // MODIFIES: this
+    // EFFECTS: implements action events for buttons on button panel
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case "Add expense":
+                // opens window for expense details to be added
                 new AddExpenseWindow(this);
                 break;
             case "Remove expense":
+                // opens window for expense details to be removed
                 new RemoveExpenseWindow(this);
                 break;
             case "Add income":
+                // opens window for income details to be added
                 new AddIncomeWindow(this);
                 break;
             case "Remove income":
+                // opens window for income details to be removed
                 new RemoveIncomeWindow(this);
                 break;
-//            case "Filter":
-//                filterTransactions();
-//                break;
             case "Save/Exit":
+                // opens window for save/exit options
                 new SaveExitWindow(this);
                 break;
         }
     }
 
-    private void filterTransactions() {
-    }
-
+    // MODIFIES: this, detailPanel
+    // EFFECTS: creates upper right panel which houses options to get budget details
     private void createDetailPanel() {
         detailPanel = new JPanel();
         detailPanel.setBorder(BorderFactory.createBevelBorder(1));
@@ -268,8 +281,9 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         addIncomeChartPanel();
     }
 
+    // MODIFIES: detailsPanel
+    // EFFECTS: creates panel to calculate balance, expenses, and income totals, added to detailPanel
     private void addTotalsPanel() {
-        //======== totals panel ========
         JPanel totalsPanel = new JPanel();
         totalsPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         totalsPanel.setLayout(new GridLayout(6, 0));
@@ -280,6 +294,8 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         detailPanel.add(totalsPanel);
     }
 
+    // MODIFIES: totalsPanel
+    // EFFECTS: creates JButton that will calculate balance
     private void createBalanceCalculation(JPanel totalsPanel) {
         JButton calculateBalance = new JButton("Calculate budget balance: ");
         calculateBalance.setHorizontalAlignment(SwingConstants.CENTER);
@@ -296,6 +312,8 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         setUpBalanceCalculationButton(calculateBalance, balanceLabel);
     }
 
+    // MODIFIES: calculateBalance JButton, balanceLabel
+    // EFFECTS: calculates and displays budget balance when calculateBalance button is clicked
     private void setUpBalanceCalculationButton(JButton calculateBalance, JLabel balanceLabel) {
         calculateBalance.setActionCommand("balance");
         calculateBalance.addActionListener(new ActionListener() {
@@ -315,6 +333,8 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         });
     }
 
+    // MODIFIES: totalsPanel
+    // EFFECTS: creates JButton, JLabel that will calculate and display total expenses
     private void createExpenseCalculation(JPanel totalsPanel) {
         JButton calculateExpenses = new JButton("Calculate total expenses: ");
         calculateExpenses.setHorizontalAlignment(SwingConstants.CENTER);
@@ -339,6 +359,8 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         });
     }
 
+    // MODIFIES: totalsPanel
+    // EFFECTS: creates JButton, JLabel that will calculate and display total income
     private void createIncomeCalculation(JPanel totalsPanel) {
         JButton calculateIncome = new JButton("Calculate total income: ");
         calculateIncome.setHorizontalAlignment(SwingConstants.CENTER);
@@ -363,8 +385,10 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         });
     }
 
+    // MODIFIES: totalsPanel
+    // EFFECTS: creates panel that houses options for getting expense details; button for opening
+    //          expensePieChart
     private void addExpensesChartPanel() {
-        // expenses chart panel
         JPanel expensesPanel = new JPanel();
         expensesPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         expensesPanel.setLayout(new FlowLayout());
@@ -379,6 +403,7 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         expensesPanel.add(expensesChartButton);
     }
 
+    // EFFECTS: when expensesChartButton is clicked, opens new ExpensePieChart window
     private void setUpExpensesChartButton(JButton expensesChartButton, BudgetAppGUI budgetAppGUI) {
         expensesChartButton.addActionListener(new ActionListener() {
             @Override
@@ -393,14 +418,15 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         });
     }
 
+    // MODIFIES: totalsPanel
+    // EFFECTS: creates panel that houses options for getting income details; button for opening
+    //          incomePieChart
     private void addIncomeChartPanel() {
-        // income chart panel
         JPanel incomePanel = new JPanel();
         incomePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         incomePanel.setLayout(new FlowLayout());
         detailPanel.add(incomePanel);
 
-        //createIncomeChart(incomePanel);
         JButton incomeChartButton = new JButton("Generate income pie chart");
         incomeChartButton.setActionCommand("income chart");
         setUpIncomeChartButton(incomeChartButton, this);
@@ -408,6 +434,7 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         incomePanel.add(incomeChartButton);
     }
 
+    // EFFECTS: when incomeChartButton is clicked, opens new IncomePieChart window
     private void setUpIncomeChartButton(JButton incomeChartButton, BudgetAppGUI budgetAppGUI) {
         incomeChartButton.addActionListener(new ActionListener() {
             @Override
@@ -422,6 +449,8 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         });
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates lower left panel to display budget in table format
     private void createBudgetPanel() {
         budgetPanel = new JPanel();
         budgetPanel.setBorder(BorderFactory.createBevelBorder(1));
@@ -435,6 +464,8 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         createBudgetTable();
     }
 
+    // MODIFIES: this, budgetPanel
+    // EFFECTS: creates budgetTable and adds it to budgetPanel
     private void createBudgetTable() {
         tableModel = new DefaultTableModel();
         budgetTable = new JTable(tableModel);
@@ -452,14 +483,17 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         pane.add(budgetPanel);
     }
 
+    // EFFECTS: creates String array of column names for budgetTable
     private void addTableColumns() {
-        columnNames = new String[]{"Type", "Category", "Description", "Amount"};
+        String[] columnNames = new String[]{"Type", "Category", "Description", "Amount"};
 
         for (int i = 0; i < 4; i++) {
             tableModel.addColumn(columnNames[i]);
         }
     }
 
+    // MODIFIES: budgetTable
+    // EFFECTS: gets array of all transaction details and adds each transaction to budgetTable
     private void addTransactionDetails() {
         transactionArray = getArrayOfTransactionDetails();
 
@@ -468,7 +502,8 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         }
     }
 
-
+    // EFFECTS: gets transaction information from this user and puts it into an array for use in
+    //          budgetTable
     private Object[][] getArrayOfTransactionDetails() {
         ArrayList<Transaction> transactions = user.getAllTransactions().getTransactions();
 
@@ -479,7 +514,7 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
 
         for (Transaction t : transactions) {
 
-            if (costCategories.contains(t.getCategory())) {
+            if (t.getType().equals("expense")) {
                 type = "Expenses";
             } else {
                 type = "Income";
@@ -497,12 +532,17 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         return transactionArray;
     }
 
+    // MODIFIES: budgetTable
+    // EFFECTS: updates budgetTable when a new expense or income is added
     public void updateTableWithAddedTransaction() {
         addMostRecentTransactionToTable();
         budgetTable.updateUI();
         budgetPanel.updateUI();
     }
 
+    // MODIFIES: budgetTable
+    // EFFECTS: gets most recent transaction added to array of transaction details and adds it
+    //          to budgetTable
     private void addMostRecentTransactionToTable() {
         transactionArray = getArrayOfTransactionDetails();
 
@@ -510,6 +550,9 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         tableModel.addRow(transactionArray[i]);
     }
 
+    // MODIFIES: budgetTable
+    // EFFECTS: updates budgetTable when an income or expense is removed; returns true if a
+    //          transaction was removed, false otherwise
     public boolean updateTableWithRemovedTransaction(Transaction t) {
         if (removeSpecifiedTransactionFromTable(t)) {
             budgetTable.updateUI();
@@ -520,7 +563,9 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         }
     }
 
-
+    // MODIFIES: budgetTable
+    // EFFECTS: searchs transactions for specified income or expense to be removed; if found,
+    //          transaction is removed and returns true; if not found, returns false
     private boolean removeSpecifiedTransactionFromTable(Transaction transaction) {
         ArrayList<Transaction> transactions = getUser().getAllTransactions().getTransactions();
 
@@ -534,6 +579,7 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         return false;
     }
 
+    // EFFECTS: returns index of matching transaction found in user's transactions
     private int getIndex(ArrayList<Transaction> transactions, Transaction t) {
         return transactions.indexOf(t);
     }

@@ -1,11 +1,9 @@
 package model;
 
-import org.json.JSONObject;
 import persistence.Writable;
 
-import java.util.EnumSet;
 
-// Represents a source of income having a brief description and total amount in dollars
+// Represents a source of income having a category, description, amount, and type income
 public class Fund extends Transaction implements Writable {
 
     // EFFECTS: constructs an income with an associated description and amount
