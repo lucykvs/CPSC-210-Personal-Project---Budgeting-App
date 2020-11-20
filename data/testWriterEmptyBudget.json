@@ -1,5 +1,4 @@
 {
-    "income": [],
-    "username": "Lucy",
-    "expenses": []
+    "transactions": [],
+    "username": "Lucy"
 }

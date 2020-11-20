@@ -1,7 +1,5 @@
 package model;
 
-import java.util.EnumSet;
-
 public enum Category {
     BILLS, DEBT_REPAYMENTS, ONE_TIME_EXPENSES, MISCELLANEOUS_PURCHASES, FOR_FUN, EMPLOYMENT, LOAN, GIFT, OTHER;
 

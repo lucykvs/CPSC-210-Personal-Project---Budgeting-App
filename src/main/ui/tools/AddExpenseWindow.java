@@ -5,7 +5,6 @@ import model.Cost;
 import ui.BudgetAppGUI;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class AddExpenseWindow extends AddTransactionWindow {
     protected String type = "expense";
@@ -15,30 +14,18 @@ public class AddExpenseWindow extends AddTransactionWindow {
     public AddExpenseWindow(BudgetAppGUI budgetAppGUI) {
         super(budgetAppGUI, "expense");
         initializePanelSetup(catOptions);
-        setUpAddButton();
     }
 
-    protected void setUpAddButton() {
-        addButton.setActionCommand("Add");
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (e.getActionCommand().equals("Add")) {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        getTransactionDetailsFromAddTransactionWindow(e);
+        addExpenseFromDetailsEntered();
+    }
 
-                    category = (String) categoryOptions.getSelectedItem();
-                    description = descriptionField.getText();
-                    amount = Double.parseDouble(amountField.getText());
+    protected void addExpenseFromDetailsEntered() {
+        Category cat = getCostCatFromString(category);
 
-                    Category cat = getCostCatFromString(category);
-
-                    BudgetAppGUI.getUser().addCost(new Cost(cat, description, amount));
-
-                    frame.dispose();
-
-                    successMessage(type, listType);
-                }
-            }
-        });
+        addTransactionFromDetailsEntered(new Cost(cat, description, amount), listType);
     }
 
     public Category getCostCatFromString(String s) {

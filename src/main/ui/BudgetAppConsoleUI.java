@@ -1,6 +1,7 @@
 package ui;
 
-import model.*;
+import model.Category;
+import model.User;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
@@ -129,7 +130,7 @@ public class BudgetAppConsoleUI {
         double amount = input.nextDouble();
 
         if (amount >= 0.0) {
-            user.addCost(new Cost(category, description, amount));
+            user.addCost(category, description, amount);
         } else {
             System.out.println("\tCannot have a negative cost.\n");
         }
@@ -178,7 +179,7 @@ public class BudgetAppConsoleUI {
         double amount = input.nextDouble();
 
         if (amount >= 0.0) {
-            user.addFund(new Fund(category, description, amount));
+            user.addFund(category, description, amount);
         } else {
             System.out.println("Cannot have a negative income.\n");
         }
@@ -240,10 +241,10 @@ public class BudgetAppConsoleUI {
             System.out.println("\tYour budget balance is: $" + user.getBudgetBalance());
         } else if (selection.equals("e")) {
             System.out.println("\tYour current expenses are:\n");
-            printAllDescriptions(user.getExpenses().getAllCostDescriptions());
+            printAllDescriptions(user.getExpenses().getAllTransactionDescriptions());
         } else if (selection.equals("i")) {
             System.out.println("\tYour current sources of income are:\n");
-            printAllDescriptions(user.getIncome().getAllFundDescriptions());
+            printAllDescriptions(user.getIncome().getAllTransactionDescriptions());
         } else {
             System.out.println("\tSelection not valid...\n");
         }

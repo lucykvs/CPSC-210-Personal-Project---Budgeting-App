@@ -6,19 +6,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Transactions {
+//    private User user;
     private ArrayList<Transaction> transactions;
 
     // EFFECTS: constructs an empty collection of costs
     public Transactions() {
         transactions = new ArrayList<>();
+//        this.user = user;
     }
 
     // REQUIRES: amount >= 0
     // MODIFIES: this
     // EFFECTS: adds a new transaction to the collection of transactions
-    public void addTransaction(Category category, String description, double amount) {
-        Transaction t = new Transaction(category, description, amount);
+    public void addTransaction(Transaction t) {
         transactions.add(t);
+    }
+
+    // REQUIRES: amount >= 0
+    // MODIFIES: this
+    // EFFECTS: adds a new transaction to the collection of transactions
+    public void addCost(Category category, String description, double amount) {
+        Transaction t = new Cost(category, description, amount);
+        transactions.add(t);
+    }
+
+    // REQUIRES: amount >= 0
+    // MODIFIES: this
+    // EFFECTS: adds a new transaction to the collection of transactions
+    public void addFund(Category category, String description, double amount) {
+        Transaction t = new Fund(category, description, amount);
+        transactions.add(t);
+    }
+
+    public double getTotalTransactions() {
+        double total = 0;
+
+        for (Transaction t : transactions) {
+            total += t.getAmount();
+        }
+        return total;
     }
 
     // MODIFIES: this
@@ -38,7 +64,7 @@ public class Transactions {
         return transactions;
     }
 
-    // EFFECTS: return JSON representation of expenses
+    // EFFECTS: return JSON representation of transactions
     public JSONArray transactionsToJson() {
         JSONArray jsonArray = new JSONArray();
 

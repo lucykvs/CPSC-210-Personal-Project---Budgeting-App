@@ -4,9 +4,7 @@ import model.Category;
 import model.Fund;
 import ui.BudgetAppGUI;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class AddIncomeWindow extends AddTransactionWindow {
     protected String type = "source of income";
@@ -16,30 +14,18 @@ public class AddIncomeWindow extends AddTransactionWindow {
     public AddIncomeWindow(BudgetAppGUI budgetAppGUI) {
         super(budgetAppGUI, "income");
         initializePanelSetup(catOptions);
-        setUpAddButton();
     }
 
-    protected void setUpAddButton() {
-        addButton.setActionCommand("Add");
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (e.getActionCommand().equals("Add")) {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        getTransactionDetailsFromAddTransactionWindow(e);
+        addIncomeFromDetailsEntered();
+    }
 
-                    category = (String) categoryOptions.getSelectedItem();
-                    description = descriptionField.getText();
-                    amount = Double.parseDouble(amountField.getText());
+    protected void addIncomeFromDetailsEntered() {
+        Category cat = getFundCatFromString(category);
 
-                    Category cat = getFundCatFromString(category);
-
-                    BudgetAppGUI.getUser().addFund(new Fund(cat, description, amount));
-
-                    frame.dispose();
-
-                    successMessage(type, listType);
-                }
-            }
-        });
+        addTransactionFromDetailsEntered(new Fund(cat, description, amount), listType);
     }
 
     public Category getFundCatFromString(String s) {

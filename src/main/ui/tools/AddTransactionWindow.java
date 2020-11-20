@@ -1,15 +1,20 @@
 package ui.tools;
 
-import model.Cost;
+import model.Category;
+import model.Transaction;
 import ui.BudgetAppGUI;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
-public abstract class AddTransactionWindow {
+public abstract class AddTransactionWindow implements ActionListener {
     private BudgetAppGUI budgetAppGUI;
     protected JComboBox<String> categoryOptions;
     protected JTextField descriptionField;
@@ -83,6 +88,50 @@ public abstract class AddTransactionWindow {
         amountField = new JTextField(10);
 
         addButton = new JButton("Add");
+        addButton.setActionCommand("Add");
+        addButton.addActionListener(this);
+    }
+
+    protected void getTransactionDetailsFromAddTransactionWindow(ActionEvent e) {
+        if (e.getActionCommand().equals("Add")) {
+
+            category = (String) categoryOptions.getSelectedItem();
+            description = descriptionField.getText();
+            amount = Double.parseDouble(amountField.getText());
+        }
+    }
+
+    protected void addTransactionFromDetailsEntered(Transaction t, String listType) {
+        BudgetAppGUI.getUser().addTransaction(t);
+        budgetAppGUI.updateTable();
+        playAddTransactionSound();
+
+        frame.dispose();
+
+        successMessage(type, listType);
+    }
+
+    protected void playAddTransactionSound() {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(
+                    new File("data/AddTransactionSound.wav").getAbsoluteFile());
+
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (Exception e) {
+            System.out.println("Error playing AddTransactionSound.");
+            e.printStackTrace();
+        }
+    }
+
+    protected void successMessage(String type, String listType) {
+        JDialog successMessage = new JDialog();
+
+        successMessage.setLocationRelativeTo(null);
+        successMessage.add(new JLabel("Successfully added " + type + " to your list of " + listType + "."));
+        successMessage.setSize(300, 100);
+        successMessage.setVisible(true);
     }
 
     protected void addFeaturesToButtonPanel() {
@@ -115,14 +164,5 @@ public abstract class AddTransactionWindow {
         amountField.setBounds(100, 155, 80, 25);
 
         addButton.setBounds(100, 200, 40, 25);
-    }
-
-    protected void successMessage(String type, String listType) {
-        JDialog successMessage = new JDialog();
-
-        successMessage.setLocationRelativeTo(null);
-        successMessage.add(new JLabel("Successfully added " + type + " to your list of " + listType + "."));
-        successMessage.setSize(300, 100);
-        successMessage.setVisible(true);
     }
 }

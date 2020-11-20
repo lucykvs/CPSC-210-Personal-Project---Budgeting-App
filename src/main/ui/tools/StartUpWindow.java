@@ -1,6 +1,5 @@
 package ui.tools;
 
-import model.User;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 import ui.BudgetAppGUI;
@@ -8,7 +7,8 @@ import ui.BudgetAppGUI;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class StartUpWindow extends JFrame implements ActionListener {

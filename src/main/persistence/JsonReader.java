@@ -4,7 +4,6 @@ import model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.awt.*;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -44,31 +43,31 @@ public class JsonReader {
     private User parseUser(JSONObject jsonObject) {
         String username = jsonObject.getString("username");
         User user = new User(username);
-        addExpenses(user, jsonObject);
-        addIncomes(user, jsonObject);
+//        addExpenses(user, jsonObject);
+//        addIncomes(user, jsonObject);
         addTransactions(user, jsonObject);
         return user;
     }
 
-    // MODIFIES: user
-    // EFFECTS: parses expenses from JSON object and adds them to user's budget
-    private void addExpenses(User user, JSONObject jsonObject) {
-        JSONArray jsonArray = jsonObject.getJSONArray("expenses");
-        for (Object json : jsonArray) {
-            JSONObject nextCost = (JSONObject) json;
-            addCost(user, nextCost);
-        }
-    }
-
-    // MODIFIES: user
-    // EFFECTS: parses incomes from JSON object and adds them to user's budget
-    private void addIncomes(User user, JSONObject jsonObject) {
-        JSONArray jsonArray = jsonObject.getJSONArray("income");
-        for (Object json : jsonArray) {
-            JSONObject nextFund = (JSONObject) json;
-            addFund(user, nextFund);
-        }
-    }
+//    // MODIFIES: user
+//    // EFFECTS: parses expenses from JSON object and adds them to user's budget
+//    private void addExpenses(User user, JSONObject jsonObject) {
+//        JSONArray jsonArray = jsonObject.getJSONArray("expenses");
+//        for (Object json : jsonArray) {
+//            JSONObject nextCost = (JSONObject) json;
+//            addCost(user, nextCost);
+//        }
+//    }
+//
+//    // MODIFIES: user
+//    // EFFECTS: parses incomes from JSON object and adds them to user's budget
+//    private void addIncomes(User user, JSONObject jsonObject) {
+//        JSONArray jsonArray = jsonObject.getJSONArray("income");
+//        for (Object json : jsonArray) {
+//            JSONObject nextFund = (JSONObject) json;
+//            addFund(user, nextFund);
+//        }
+//    }
 
     // MODIFIES: user
     // EFFECTS: parses incomes from JSON object and adds them to user's budget
@@ -80,33 +79,37 @@ public class JsonReader {
         }
     }
 
-    // MODIFIES: user
-    // EFFECTS: parses cost from JSON object and adds it to user's budget
-    private void addCost(User user, JSONObject jsonObject) {
-        Category category = Category.valueOf(jsonObject.getString("category"));
-        String description = jsonObject.getString("description");
-        double amount = jsonObject.getDouble("amount");
-        Cost cost = new Cost(category, description, amount);
-        user.addCost(cost);
-    }
+//    // MODIFIES: user
+//    // EFFECTS: parses cost from JSON object and adds it to user's budget
+//    private void addCost(User user, JSONObject jsonObject) {
+//        Category category = Category.valueOf(jsonObject.getString("category"));
+//        String description = jsonObject.getString("description");
+//        double amount = jsonObject.getDouble("amount");
+//        user.addCost(category, description, amount);
+//    }
+//
+//    // MODIFIES: user
+//    // EFFECTS: parses fund from JSON object and adds it to user's income
+//    private void addFund(User user, JSONObject jsonObject) {
+//        Category category = Category.valueOf(jsonObject.getString("category"));
+//        String description = jsonObject.getString("description");
+//        double amount = jsonObject.getDouble("amount");
+//        user.addFund(category, description, amount);
+//    }
 
     // MODIFIES: user
-    // EFFECTS: parses fund from JSON object and adds it to user's income
-    private void addFund(User user, JSONObject jsonObject) {
-        Category category = Category.valueOf(jsonObject.getString("category"));
-        String description = jsonObject.getString("description");
-        double amount = jsonObject.getDouble("amount");
-        Fund fund = new Fund(category, description, amount);
-        user.addFund(fund);
-    }
-
-    // MODIFIES: user
-    // EFFECTS: parses fund from JSON object and adds it to user's income
+    // EFFECTS: parses transaction from JSON object and adds it to user's income or expenses
     private void addTransaction(User user, JSONObject jsonObject) {
         Category category = Category.valueOf(jsonObject.getString("category"));
         String description = jsonObject.getString("description");
         double amount = jsonObject.getDouble("amount");
-        Transaction transaction = new Transaction(category, description, amount);
-        user.addTransaction(transaction);
+        String type = jsonObject.getString("type");
+        Transaction t;
+
+        if (type.equals("income")) {
+            user.addFund(category, description, amount);
+        } else {
+            user.addCost(category, description, amount);
+        }
     }
 }

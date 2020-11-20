@@ -2,10 +2,11 @@ package model;
 
 import org.json.JSONObject;
 
-public class Transaction {
+public abstract class Transaction {
     private String description;
     private double amount;
     private Category category;
+    private String type;
 
     // EFFECTS: constructs an income with an associated description and amount
     public Transaction(Category category, String description, double amount) {
@@ -29,12 +30,21 @@ public class Transaction {
         return amount;
     }
 
+    protected void setType(String type) {
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
     // EFFECTS: returns JSON representation of cost
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("category", category);
         json.put("description", description);
         json.put("amount", amount);
+        json.put("type", type);
         return json;
     }
 }

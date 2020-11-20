@@ -1,27 +1,29 @@
 {
-    "income": [
+    "transactions": [
         {
             "amount": 1222.75,
             "description": "Las Margs",
-            "category": "EMPLOYMENT"
+            "category": "EMPLOYMENT",
+            "type": "income"
         },
         {
             "amount": 2400,
             "description": "Student loans",
-            "category": "LOAN"
-        }
-    ],
-    "username": "Lucy",
-    "expenses": [
+            "category": "LOAN",
+            "type": "income"
+        },
         {
             "amount": 850,
             "description": "Rent",
-            "category": "BILLS"
+            "category": "BILLS",
+            "type": "expense"
         },
         {
             "amount": 3050,
             "description": "Tuition",
-            "category": "ONE_TIME_EXPENSES"
+            "category": "ONE_TIME_EXPENSES",
+            "type": "expense"
         }
-    ]
+    ],
+    "username": "Lucy"
 }
