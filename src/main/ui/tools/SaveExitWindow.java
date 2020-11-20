@@ -19,13 +19,20 @@ public class SaveExitWindow extends JFrame implements ActionListener {
     public SaveExitWindow(BudgetAppGUI budgetAppGUI) {
         super("Save/Exit");
         this.budgetAppGUI = budgetAppGUI;
+        initializePanel();
+    }
 
+    private void initializePanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(new EmptyBorder(1, 1, 1, 1));
         JPanel layout = new JPanel(new GridBagLayout());
         layout.setBorder(new EmptyBorder(2, 3, 2, 3));
         JPanel btnPanel = new JPanel(new GridLayout(7, 1, 0, 0));
+        createButtons(btnPanel);
+        setPanelBehaviour(btnPanel, layout, panel);
+    }
 
+    private void createButtons(JPanel btnPanel) {
         JLabel saveExitMessage = new JLabel("Save current user?");
 
         JButton saveButton = new JButton("Save");
@@ -40,10 +47,14 @@ public class SaveExitWindow extends JFrame implements ActionListener {
         exitButton.addActionListener(this);
         exitButton.setActionCommand("Exit");
 
+        addButtonsToPanel(btnPanel, saveExitMessage, saveButton, saveAndExitButton, exitButton);
+    }
+
+    private void addButtonsToPanel(JPanel btnPanel, JLabel saveExitMessage, JButton saveButton,
+                                   JButton saveAndExitButton, JButton exitButton) {
         JPanel vspace1 = new JPanel(null);
         JPanel vspace2 = new JPanel(null);
         JPanel vspace3 = new JPanel(null);
-        JPanel vspace4 = new JPanel(null);
 
         btnPanel.add(saveExitMessage);
         btnPanel.add(vspace1);
@@ -52,7 +63,9 @@ public class SaveExitWindow extends JFrame implements ActionListener {
         btnPanel.add(saveAndExitButton);
         btnPanel.add(vspace3);
         btnPanel.add(exitButton);
+    }
 
+    private void setPanelBehaviour(JPanel btnPanel, JPanel layout, JPanel panel) {
         layout.add(btnPanel);
         panel.add(layout, BorderLayout.CENTER);
 

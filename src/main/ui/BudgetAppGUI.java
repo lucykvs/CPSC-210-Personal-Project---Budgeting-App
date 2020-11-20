@@ -165,27 +165,40 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         JPanel vspacer2 = new JPanel(null);
         JPanel vspacer3 = new JPanel(null);
 
+        createAddExpenseButton(vspacer1);
+        createAddIncomeButton(vspacer2);
+        createFilterButton(vspacer3);
+        createSaveExitButton();
+    }
+
+    private void createAddExpenseButton(JPanel vspacer1) {
         //---- addExpenseButton ----
         JButton addExpenseButton = new JButton("Add expense");
         buttonPanel.add(addExpenseButton);
         buttonPanel.add(vspacer1);
         addExpenseButton.setActionCommand("Add expense");
         addExpenseButton.addActionListener(this);
+    }
 
+    private void createAddIncomeButton(JPanel vspacer2) {
         //---- addIncomeButton ----
         JButton addIncomeButton = new JButton("Add income");
         buttonPanel.add(addIncomeButton);
         buttonPanel.add(vspacer2);
         addIncomeButton.setActionCommand("Add income");
         addIncomeButton.addActionListener(this);
+    }
 
+    private void createFilterButton(JPanel vspacer3) {
         //---- filterButton ----
         JButton filterButton = new JButton("Filter");
         buttonPanel.add(filterButton);
         buttonPanel.add(vspacer3);
         filterButton.setActionCommand("Filter");
         filterButton.addActionListener(this);
+    }
 
+    private void createSaveExitButton() {
         // Save/exit button
         JButton saveExitButton = new JButton("Save/Exit");
         buttonPanel.add(saveExitButton);
@@ -228,6 +241,12 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
 
         detailPanel.setLayout(new GridLayout(1, 3));
 
+        addTotalsPanel();
+        addExpensesChartPanel();
+        addIncomeChartPanel();
+    }
+
+    private void addTotalsPanel() {
         //======== totals panel ========
         JPanel totalsPanel = new JPanel();
         totalsPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -249,13 +268,17 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         totalsPanel.add(incomeTotal);
 
         detailPanel.add(totalsPanel);
+    }
 
+    private void addExpensesChartPanel() {
         // income chart panel
         JPanel incomePanel = new JPanel();
         incomePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         incomePanel.setLayout(new FlowLayout());
         detailPanel.add(incomePanel);
+    }
 
+    private void addIncomeChartPanel() {
         // expenses chart panel
         JPanel expensesPanel = new JPanel();
         expensesPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -331,7 +354,7 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
 
             String category = Category.getCatString(t.getCategory());
             String description = t.getDescription();
-            Double amount = t.getAmount();
+            double amount = t.getAmount();
 
             Object[] transaction = {type, category, description, amount};
             transactionArray[i] = transaction;

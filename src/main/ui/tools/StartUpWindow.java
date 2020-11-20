@@ -14,6 +14,7 @@ import java.io.IOException;
 public class StartUpWindow extends JFrame implements ActionListener {
     private JButton createNew;
     private JButton loadUser;
+    private JLabel openingMessage;
     private static final String JSON_STORE = "./data/budget.json";
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
@@ -27,10 +28,13 @@ public class StartUpWindow extends JFrame implements ActionListener {
         JPanel layout = new JPanel(new GridBagLayout());
         layout.setBorder(new EmptyBorder(2, 3, 2, 3));
         JPanel btnPanel = new JPanel(new GridLayout(5, 1, 0, 0));
+        initializeGraphics();
+        addButtonsToPanel(btnPanel);
+        setPanelBehaviour(layout, panel, btnPanel);
+    }
 
-        JPanel vspace1 = new JPanel(null);
-        JPanel vspace2 = new JPanel(null);
-        JLabel openingMessage = new JLabel("Welcome to your budgeting application! Select an option:");
+    private void initializeGraphics() {
+        openingMessage = new JLabel("Welcome to your budgeting application! Select an option:");
 
         createNew = new JButton("Create new user");
         createNew.setActionCommand("Create new");
@@ -41,13 +45,20 @@ public class StartUpWindow extends JFrame implements ActionListener {
         loadUser.setActionCommand("Load");
         loadUser.addActionListener(this);
         add(loadUser);
+    }
+
+    private void addButtonsToPanel(JPanel btnPanel) {
+        JPanel vspace1 = new JPanel(null);
+        JPanel vspace2 = new JPanel(null);
 
         btnPanel.add(openingMessage);
         btnPanel.add(vspace2);
         btnPanel.add(createNew);
         btnPanel.add(vspace1);
         btnPanel.add(loadUser);
+    }
 
+    private void setPanelBehaviour(JPanel layout, JPanel panel, JPanel btnPanel) {
         layout.add(btnPanel);
         panel.add(layout, BorderLayout.CENTER);
 

@@ -5,32 +5,25 @@ public enum Category {
 
     // EFFECTS: converts Category to more appealing string
     public static String getCatString(Category c) {
-        String catString = "";
+        String catString;
         switch (c) {
-            case BILLS:
-                catString = "Bills";
+            case BILLS: catString = "Bills";
                 break;
-            case DEBT_REPAYMENTS:
-                catString = "Debt repayments";
+            case DEBT_REPAYMENTS: catString = "Debt repayments";
                 break;
-            case ONE_TIME_EXPENSES:
-                catString = "One-time expenses";
+            case ONE_TIME_EXPENSES: catString = "One-time expenses";
                 break;
-            case MISCELLANEOUS_PURCHASES:
-                catString = "Miscellaneous expenses";
+            case MISCELLANEOUS_PURCHASES: catString = "Miscellaneous expenses";
                 break;
-            case FOR_FUN:
-                catString = "For fun!";
+            case FOR_FUN: catString = "For fun!";
                 break;
-            case EMPLOYMENT:
-                catString = "Employment";
+            case EMPLOYMENT: catString = "Employment";
                 break;
-            case LOAN:
-                catString = "Loan";
-            case GIFT:
-                catString = "Gift";
-            default:
-                catString = "Other";
+            case LOAN: catString = "Loan";
+                break;
+            case GIFT: catString = "Gift";
+                break;
+            default: catString = "Other";
         }
         return catString;
     }

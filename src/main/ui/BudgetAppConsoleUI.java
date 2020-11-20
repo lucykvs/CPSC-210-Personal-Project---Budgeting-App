@@ -145,25 +145,25 @@ public class BudgetAppConsoleUI {
             System.out.println("\t" + menuLabel + " -> " + Category.getCatString(c));
             menuLabel++;
         }
-
         int menuSelection = input.nextInt();
+
+        Category cat = getSelectedCategory(menuSelection);
+        return cat;
+    }
+
+    private Category getSelectedCategory(int menuSelection) {
         Category cat;
 
         switch (menuSelection) {
-            case 1:
-                cat = Category.BILLS;
+            case 1: cat = Category.BILLS;
                 break;
-            case 2:
-                cat = Category.DEBT_REPAYMENTS;
+            case 2: cat = Category.DEBT_REPAYMENTS;
                 break;
-            case 3:
-                cat = Category.ONE_TIME_EXPENSES;
+            case 3: cat = Category.ONE_TIME_EXPENSES;
                 break;
-            case 4:
-                cat = Category.MISCELLANEOUS_PURCHASES;
+            case 4: cat = Category.MISCELLANEOUS_PURCHASES;
                 break;
-            default:
-                cat = Category.FOR_FUN;
+            default: cat = Category.FOR_FUN;
                 break;
         }
         return cat;
