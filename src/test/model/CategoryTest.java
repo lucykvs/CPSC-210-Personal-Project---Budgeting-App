@@ -15,5 +15,6 @@ public class CategoryTest {
     void testValueOfLabel() {
         assertEquals(Category.BILLS, Category.valueOfLabel("Bills"));
         assertEquals(Category.OTHER, Category.valueOfLabel("Other"));
+        assertEquals(null, Category.valueOfLabel("Uther"));
     }
 }

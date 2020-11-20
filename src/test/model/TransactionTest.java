@@ -50,9 +50,11 @@ public class TransactionTest {
         Transaction transaction4 = new Cost(Category.BILLS, "Tent", 800.0);
         Transaction transaction5 = new Cost(Category.BILLS, "Tent", 850.0);
         Transaction transactionNull = null;
+        Category c = Category.GIFT;
 
         assertEquals(transaction1, transaction1);
         assertNotEquals(transactionNull, transaction1);
+        assertNotEquals(c, transaction1);
         assertNotEquals(transaction2, transaction1);
         assertEquals(transaction3, transaction1);
         assertNotEquals(transaction4, transaction1);
