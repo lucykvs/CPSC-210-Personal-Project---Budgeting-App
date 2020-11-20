@@ -5,6 +5,7 @@ import model.Transaction;
 import model.User;
 import ui.tools.AddExpenseWindow;
 import ui.tools.AddIncomeWindow;
+//import ui.tools.ExpensesPieChart;
 import ui.tools.SaveExitWindow;
 
 import javax.imageio.ImageIO;
@@ -276,6 +277,9 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         incomePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         incomePanel.setLayout(new FlowLayout());
         detailPanel.add(incomePanel);
+//
+//        ExpensesPieChart expensesPieChart = new ExpensesPieChart();
+//        incomePanel.add(expensesPieChart);
     }
 
     private void addIncomeChartPanel() {

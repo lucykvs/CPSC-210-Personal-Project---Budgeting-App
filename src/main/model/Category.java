@@ -13,9 +13,9 @@ public enum Category {
                 break;
             case ONE_TIME_EXPENSES: catString = "One-time expenses";
                 break;
-            case MISCELLANEOUS_PURCHASES: catString = "Miscellaneous expenses";
+            case MISCELLANEOUS_PURCHASES: catString = "Miscellaneous purchases";
                 break;
-            case FOR_FUN: catString = "For fun!";
+            case FOR_FUN: catString = "For fun";
                 break;
             case EMPLOYMENT: catString = "Employment";
                 break;
