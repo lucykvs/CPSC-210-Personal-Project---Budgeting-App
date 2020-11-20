@@ -15,8 +15,4 @@ public class Fund extends Transaction implements Writable {
         fundCategories = EnumSet.of(Category.EMPLOYMENT,Category.LOAN, Category.GIFT, Category.OTHER);
         setType("income");
     }
-
-    public EnumSet getFundCategories() {
-        return fundCategories;
-    }
 }

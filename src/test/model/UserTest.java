@@ -24,6 +24,8 @@ public class UserTest {
         assertEquals("Lucy", user.getName());
         assertEquals(user.getIncome().getTotalTransactions(), 0);
         assertEquals(user.getExpenses().getTotalTransactions(), 0);
+        assertEquals(user.getAllTransactions().getTotalTransactions(),0);
+        assertEquals(user.getAllTransactions().getTransactions().size(), 0);
     }
 
     @Test
@@ -46,8 +48,9 @@ public class UserTest {
 
     @Test
     public void testGetTotalExpenseAmountSomeExpenses() {
-        user.getExpenses().addCost(cc1,"Groceries", 150);
-        user.getExpenses().addCost(cc1,"Gas",90);
+        user.addCost(cc1,"Groceries", 150);
+        user.addCost(cc1,"Gas",90);
+        assertEquals(2, user.getAllTransactions().getTransactions().size());
 
         assertEquals(150+90,user.getTotalExpenseAmount());
     }

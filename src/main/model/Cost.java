@@ -16,8 +16,4 @@ public class Cost extends Transaction implements Writable {
                 Category.MISCELLANEOUS_PURCHASES, Category.FOR_FUN);
         setType("expense");
     }
-
-    public EnumSet getCostCategories() {
-        return costCategories;
-    }
 }
