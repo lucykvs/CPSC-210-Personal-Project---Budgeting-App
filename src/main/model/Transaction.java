@@ -2,6 +2,8 @@ package model;
 
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 public abstract class Transaction {
     private String description;
     private double amount;
@@ -46,5 +48,24 @@ public abstract class Transaction {
         json.put("amount", amount);
         json.put("type", type);
         return json;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Transaction that = (Transaction) o;
+        return Double.compare(that.amount, amount) == 0
+                && description.equals(that.description)
+                && category == that.category;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(description, amount, category);
     }
 }

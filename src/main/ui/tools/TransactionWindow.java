@@ -1,6 +1,5 @@
 package ui.tools;
 
-import model.Category;
 import model.Transaction;
 import ui.BudgetAppGUI;
 
@@ -14,8 +13,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-public abstract class AddTransactionWindow implements ActionListener {
-    private BudgetAppGUI budgetAppGUI;
+public abstract class TransactionWindow implements ActionListener {
+    protected BudgetAppGUI budgetAppGUI;
     protected JComboBox<String> categoryOptions;
     protected JTextField descriptionField;
     protected JTextField amountField;
@@ -28,6 +27,7 @@ public abstract class AddTransactionWindow implements ActionListener {
     private JLabel addTransactionMessage;
     private JPanel vspace;
     protected JButton addButton;
+    protected JButton removeButton;
     protected JFrame frame;
     protected JPanel panel;
     private JPanel layout;
@@ -37,8 +37,8 @@ public abstract class AddTransactionWindow implements ActionListener {
     private String[] catOptions;
 
 
-    public AddTransactionWindow(BudgetAppGUI budgetAppGUI, String type) {
-        frame = new JFrame("Add " + type + ":");
+    public TransactionWindow(BudgetAppGUI budgetAppGUI, String title, String type) {
+        frame = new JFrame(title);
         this.type = type;
         this.budgetAppGUI = budgetAppGUI;
     }
@@ -87,13 +87,19 @@ public abstract class AddTransactionWindow implements ActionListener {
         amountLabel = new JLabel("Amount:");
         amountField = new JTextField(10);
 
-        addButton = new JButton("Add");
-        addButton.setActionCommand("Add");
-        addButton.addActionListener(this);
+        if (frame.getTitle().startsWith("Add")) {
+            addButton = new JButton("Add transaction");
+            addButton.setActionCommand("Add");
+            addButton.addActionListener(this);
+        } else if (frame.getTitle().startsWith("Rem")) {
+            removeButton = new JButton("Remove transaction");
+            removeButton.setActionCommand("Remove");
+            removeButton.addActionListener(this);
+        }
     }
 
-    protected void getTransactionDetailsFromAddTransactionWindow(ActionEvent e) {
-        if (e.getActionCommand().equals("Add")) {
+    protected void getTransactionDetailsFromTransactionWindow(ActionEvent e) {
+        if (e.getActionCommand().equals("Add") || e.getActionCommand().equals("Remove")) {
 
             category = (String) categoryOptions.getSelectedItem();
             description = descriptionField.getText();
@@ -101,14 +107,21 @@ public abstract class AddTransactionWindow implements ActionListener {
         }
     }
 
-    protected void addTransactionFromDetailsEntered(Transaction t, String listType) {
-        BudgetAppGUI.getUser().addTransaction(t);
-        budgetAppGUI.updateTable();
+    protected void updateUIWithTransactionFromDetailsEntered(String listType) {
+        budgetAppGUI.updateTableWithAddedTransaction();
         playAddTransactionSound();
 
         frame.dispose();
 
-        successMessage(type, listType);
+        successMessage("Successfully added " + type + " to your list of " + listType + ".");
+    }
+
+    protected void removeTransactionFromDetailsEntered(Transaction t, String listType) {
+        budgetAppGUI.updateTableWithRemovedTransaction(t);
+
+        frame.dispose();
+
+        successMessage("Successfully removed " + type + " from your list of " + listType + ".");
     }
 
     protected void playAddTransactionSound() {
@@ -125,11 +138,11 @@ public abstract class AddTransactionWindow implements ActionListener {
         }
     }
 
-    protected void successMessage(String type, String listType) {
+    protected void successMessage(String message) {
         JDialog successMessage = new JDialog();
 
         successMessage.setLocationRelativeTo(null);
-        successMessage.add(new JLabel("Successfully added " + type + " to your list of " + listType + "."));
+        successMessage.add(new JLabel(message));
         successMessage.setSize(300, 100);
         successMessage.setVisible(true);
     }
@@ -147,12 +160,16 @@ public abstract class AddTransactionWindow implements ActionListener {
         btnPanel.add(amountLabel);
         btnPanel.add(amountField);
 
-        btnPanel.add(addButton);
+        if (frame.getTitle().startsWith("Add")) {
+            btnPanel.add(addButton);
+        } else if (frame.getTitle().startsWith("Remove")) {
+            btnPanel.add(removeButton);
+        }
     }
 
     protected void setFeatureBounds() {
         addTransactionMessage.setBounds(10, 20, 80, 25);
-        vspace.setBounds(10,45,80,20);
+        vspace.setBounds(10, 45, 80, 20);
 
         catLabel.setBounds(10, 65, 80, 25);
         categoryOptions.setBounds(100, 65, 80, 25);
@@ -163,6 +180,13 @@ public abstract class AddTransactionWindow implements ActionListener {
         amountLabel.setBounds(10, 155, 80, 25);
         amountField.setBounds(100, 155, 80, 25);
 
-        addButton.setBounds(100, 200, 40, 25);
+        if (frame.getTitle().startsWith("Add")) {
+            addButton.setBounds(100, 200, 40, 25);
+        } else if (frame.getTitle().startsWith("Rem")) {
+            removeButton.setBounds(100, 200, 40, 25);
+        }
     }
 }
+
+
+

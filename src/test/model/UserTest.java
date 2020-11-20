@@ -118,5 +118,17 @@ public class UserTest {
         assertEquals("Lucy",username);
         assertEquals(3, transactions.length());
     }
+
+    @Test
+    public void testRemoveTransaction() {
+        user.addFund(fc1,"Work", 2000);
+        user.addFund(fc4,"Bursary",1200);
+
+        assertEquals(2, user.getAllTransactions().getTransactions().size());
+
+        user.removeTransaction(new Fund(fc1, "Work", 2000));
+        assertEquals(1, user.getAllTransactions().getTransactions().size());
+        assertEquals(1, user.getIncome().getTransactions().size());
+    }
 }
 

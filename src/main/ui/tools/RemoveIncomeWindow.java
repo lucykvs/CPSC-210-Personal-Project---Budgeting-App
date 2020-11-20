@@ -1,30 +1,31 @@
 package ui.tools;
 
 import model.Category;
+import model.Cost;
 import model.Fund;
 import ui.BudgetAppGUI;
 
 import java.awt.event.ActionEvent;
 
-public class AddIncomeWindow extends TransactionWindow {
+public class RemoveIncomeWindow extends TransactionWindow {
     protected String listType = "incomes";
     protected String[] catOptions = {"Employment", "Loan", "Gift", "Other"};
 
-    public AddIncomeWindow(BudgetAppGUI budgetAppGUI) {
-        super(budgetAppGUI, "Add income", "source of income");
+    public RemoveIncomeWindow(BudgetAppGUI budgetAppGUI) {
+        super(budgetAppGUI, "Remove income", "source of income");
         initializePanelSetup(catOptions);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         getTransactionDetailsFromTransactionWindow(e);
-        addIncomeFromDetailsEntered();
+        removeIncomeFromDetailsEntered();
     }
 
-    protected void addIncomeFromDetailsEntered() {
+    protected void removeIncomeFromDetailsEntered() {
         Category cat = getFundCatFromString(category);
-        budgetAppGUI.getUser().addFund(cat, description, amount);
-        updateUIWithTransactionFromDetailsEntered(listType);
+
+        removeTransactionFromDetailsEntered(new Fund(cat, description, amount), listType);
     }
 
     public Category getFundCatFromString(String s) {

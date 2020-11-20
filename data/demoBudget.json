@@ -1,0 +1,89 @@
+{
+  "transactions": [
+    {
+      "amount": 2000,
+      "description": "Loan from parents",
+      "category": "LOAN",
+      "type": "income"
+    },
+    {
+      "amount": 1222.75,
+      "description": "Job, November",
+      "category": "EMPLOYMENT",
+      "type": "income"
+    },
+    {
+      "amount": 3050,
+      "description": "Tuition",
+      "category": "ONE_TIME_EXPENSES",
+      "type": "expense"
+    },
+    {
+      "amount": 850,
+      "description": "Rent",
+      "category": "BILLS",
+      "type": "expense"
+    },
+    {
+      "amount": 100,
+      "description": "Christmas present",
+      "category": "GIFT",
+      "type": "income"
+    },
+    {
+      "amount": 5500.00,
+      "description": "Used car",
+      "category": "MISCELLANEOUS_PURCHASES",
+      "type": "expense"
+    },
+    {
+      "amount": 85.00,
+      "description": "Car insurance",
+      "category": "BILLS",
+      "type": "expense"
+    },
+    {
+      "amount": 1000,
+      "description": "Student loan payments",
+      "category": "DEBT_REPAYMENTS",
+      "type": "expense"
+    },
+    {
+      "amount": 3050,
+      "description": "Tuition",
+      "category": "ONE_TIME_EXPENSES",
+      "type": "expense"
+    },
+    {
+      "amount": 300,
+      "description": "sold couch",
+      "category": "OTHER",
+      "type": "income"
+    },
+    {
+      "amount": 2000.00,
+      "description": "Job, October",
+      "category": "EMPLOYMENT",
+      "type": "income"
+    },
+    {
+      "amount": 15.00,
+      "description": "Noodle Box",
+      "category": "FOR_FUN",
+      "type": "expense"
+    },
+    {
+      "amount": 80.00,
+      "description": "Wifi",
+      "category": "BILLS",
+      "type": "expense"
+    },
+    {
+      "amount": 60.00,
+      "description": "Groceries",
+      "category": "ONE_TIME_EXPENSES",
+      "type": "expense"
+    }
+  ],
+  "username": "Demo"
+}

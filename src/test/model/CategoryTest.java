@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class CategoryTest {
     @Test
     void testGetCatStringCase1() {
-        assertEquals("Bills", Category.getCatString(Category.BILLS));
+
         assertEquals( "Debt repayments", Category.getCatString(Category.DEBT_REPAYMENTS));
         assertEquals("One-time expenses", Category.getCatString(Category.ONE_TIME_EXPENSES));
         assertEquals("Miscellaneous purchases", Category.getCatString(Category.MISCELLANEOUS_PURCHASES));

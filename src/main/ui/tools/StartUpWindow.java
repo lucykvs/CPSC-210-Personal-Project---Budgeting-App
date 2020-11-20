@@ -1,5 +1,6 @@
 package ui.tools;
 
+import model.User;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 import ui.BudgetAppGUI;
@@ -14,11 +15,11 @@ import java.io.IOException;
 public class StartUpWindow extends JFrame implements ActionListener {
     private JButton createNew;
     private JButton loadUser;
+    private JButton loadDemoUser;
     private JLabel openingMessage;
     private static final String JSON_STORE = "./data/budget.json";
-    private JsonWriter jsonWriter;
+    private static final String JSON_DEMO = "./data/demoBudget.json";
     private JsonReader jsonReader;
-    //public User user;
     private JDialog userMessage;
 
     public StartUpWindow() {
@@ -27,7 +28,7 @@ public class StartUpWindow extends JFrame implements ActionListener {
         panel.setBorder(new EmptyBorder(1, 1, 1, 1));
         JPanel layout = new JPanel(new GridBagLayout());
         layout.setBorder(new EmptyBorder(2, 3, 2, 3));
-        JPanel btnPanel = new JPanel(new GridLayout(5, 1, 0, 0));
+        JPanel btnPanel = new JPanel(new GridLayout(7, 1, 0, 0));
         initializeGraphics();
         addButtonsToPanel(btnPanel);
         setPanelBehaviour(layout, panel, btnPanel);
@@ -42,20 +43,28 @@ public class StartUpWindow extends JFrame implements ActionListener {
         add(createNew);
 
         loadUser = new JButton("Load previous user");
-        loadUser.setActionCommand("Load");
+        loadUser.setActionCommand("Load previous");
         loadUser.addActionListener(this);
         add(loadUser);
+
+        loadDemoUser = new JButton("Load demo user");
+        loadDemoUser.setActionCommand("Load demo");
+        loadDemoUser.addActionListener(this);
+        add(loadDemoUser);
     }
 
     private void addButtonsToPanel(JPanel btnPanel) {
         JPanel vspace1 = new JPanel(null);
         JPanel vspace2 = new JPanel(null);
+        JPanel vspace3 = new JPanel(null);
 
         btnPanel.add(openingMessage);
         btnPanel.add(vspace2);
         btnPanel.add(createNew);
         btnPanel.add(vspace1);
         btnPanel.add(loadUser);
+        btnPanel.add(vspace3);
+        btnPanel.add(loadDemoUser);
     }
 
     private void setPanelBehaviour(JPanel layout, JPanel panel, JPanel btnPanel) {
@@ -66,7 +75,7 @@ public class StartUpWindow extends JFrame implements ActionListener {
         pack();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-        setSize(350, 200);
+        setSize(350, 300);
         setVisible(true);
     }
 
@@ -74,10 +83,12 @@ public class StartUpWindow extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
 
-        if (cmd.equals("Create new")) {
-            createNewUser();
-        } else {
+        if (cmd.equals("Load previous")) {
             loadPreviousUser();
+        } else if (cmd.equals("Load demo")) {
+            loadDemoUser();
+        } else {
+            createNewUser();
         }
     }
 
@@ -94,7 +105,7 @@ public class StartUpWindow extends JFrame implements ActionListener {
         BudgetAppGUI.setUser(username);
         userMessage.setMinimumSize(new Dimension(400, 100));
         userMessage.setLocationRelativeTo(null);
-        userMessage.add(new JLabel("Successfully created new user: " + BudgetAppGUI.getUser().getName() + "."));
+        userMessage.add(new JLabel("Successfully created new user: " + username + "."));
         userMessage.setSize(100,100);
         dispose();
         new BudgetAppGUI().setVisible(true);
@@ -102,17 +113,40 @@ public class StartUpWindow extends JFrame implements ActionListener {
     }
 
     // MODIFIES: this
-    // EFFECTS: loads user and budget information from file
+    // EFFECTS: loads previous user from file
     public void loadPreviousUser() {
         jsonReader = new JsonReader(JSON_STORE);
 
         try {
-            BudgetAppGUI.setUser(jsonReader.read());
+            User user = jsonReader.read();
+            BudgetAppGUI.setUser(user);
             userMessage = new JDialog(this);
             userMessage.setMinimumSize(new Dimension(400, 100));
             userMessage.setLocationRelativeTo(null);
             userMessage.add(new JLabel(new StringBuilder().append("Successfully loaded ")
-                    .append(BudgetAppGUI.getUser().getName()).append("'s budget from ").append(JSON_STORE).toString()));
+                    .append(user.getName()).append("'s budget from ").append(JSON_STORE).toString()));
+            userMessage.setSize(100,100);
+            dispose();
+            new BudgetAppGUI().setVisible(true);
+            userMessage.setVisible(true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads demo user from file
+    public void loadDemoUser() {
+        jsonReader = new JsonReader(JSON_DEMO);
+
+        try {
+            User user = jsonReader.read();
+            BudgetAppGUI.setUser(user);
+            userMessage = new JDialog(this);
+            userMessage.setMinimumSize(new Dimension(400, 100));
+            userMessage.setLocationRelativeTo(null);
+            userMessage.add(new JLabel(new StringBuilder().append("Successfully loaded ")
+                    .append(user.getName()).append("'s budget from ").append(JSON_DEMO).toString()));
             userMessage.setSize(100,100);
             dispose();
             new BudgetAppGUI().setVisible(true);

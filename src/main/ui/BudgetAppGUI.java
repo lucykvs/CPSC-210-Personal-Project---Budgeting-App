@@ -3,10 +3,8 @@ package ui;
 import model.Category;
 import model.Transaction;
 import model.User;
-import ui.tools.AddExpenseWindow;
-import ui.tools.AddIncomeWindow;
-//import ui.tools.ExpensesPieChart;
-import ui.tools.SaveExitWindow;
+import org.jfree.ui.RefineryUtilities;
+import ui.tools.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -66,7 +64,7 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         user = previousUser;
     }
 
-    public static User getUser() {
+    public User getUser() {
         return user;
     }
 
@@ -127,30 +125,26 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         userPanel.setMinimumSize(new Dimension(80, HEIGHT / 4));
         userPanel.setMaximumSize(new Dimension(WIDTH / 4, HEIGHT / 4));
         userPanel.setPreferredSize(new Dimension(WIDTH / 4, HEIGHT / 4));
+        userPanel.setBorder(BorderFactory.createBevelBorder(1));
         userPanel.setBorder(new javax.swing.border.CompoundBorder(BorderFactory.createBevelBorder(1),
-                new javax.swing.border.TitledBorder(userPanel.getBorder(),"User:",javax.swing.border.TitledBorder
-                .CENTER,javax.swing.border.TitledBorder.TOP,new Font("Arial",Font.BOLD,14),
-                Color.blue)));
-
-        userPanel.setLayout(new GridBagLayout());
-        ((GridBagLayout)userPanel.getLayout()).columnWidths = new int[] {0, 0, 0};
-        ((GridBagLayout)userPanel.getLayout()).rowHeights = new int[] {0, 0, 0, 0};
-        ((GridBagLayout)userPanel.getLayout()).columnWeights = new double[] {0.0, 0.0, 1.0E-4};
-        ((GridBagLayout)userPanel.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 1.0E-4};
-
+                new javax.swing.border.TitledBorder(userPanel.getBorder(),"Username: " + getUser().getName(),
+                        javax.swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder.TOP,
+                        new Font("Arial",Font.BOLD,14), Color.blue)));
+        userPanel.setOpaque(true);
+        userPanel.setBackground(Color.WHITE);
         addUserPhoto();
         pane.add(userPanel);
     }
 
     private void addUserPhoto() {
         try {
-            BufferedImage fullSizeUserPic = ImageIO.read(new File("./data/tobs.jpg"));
-            Image scaledUserPic = fullSizeUserPic.getScaledInstance(userPanel.getPreferredSize().width - 75,
-                    userPanel.getPreferredSize().height - 20, Image.SCALE_SMOOTH);
+            BufferedImage fullSizeUserPic = ImageIO.read(new File("./data/budgetImage2.png"));
+            Image scaledUserPic = fullSizeUserPic.getScaledInstance(userPanel.getPreferredSize().width - 40,
+                    userPanel.getPreferredSize().height, Image.SCALE_SMOOTH);
             JLabel imagePanel = new JLabel(new ImageIcon(scaledUserPic));
-            userPanel.add(imagePanel, new GridBagConstraints(2, 2, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                    new Insets(0, 0, 5, 0), 0, 0));
+            userPanel.add(imagePanel);
+            imagePanel.setHorizontalAlignment(SwingConstants.CENTER);
+            imagePanel.setVerticalAlignment(SwingConstants.BOTTOM);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -161,14 +155,17 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         buttonPanel = new JPanel();
         buttonPanel.setBorder(BorderFactory.createBevelBorder(1));
 
-        buttonPanel.setLayout(new GridLayout(7, 0));
+        buttonPanel.setLayout(new GridLayout(9, 0));
         JPanel vspacer1 = new JPanel(null);
         JPanel vspacer2 = new JPanel(null);
         JPanel vspacer3 = new JPanel(null);
+        JPanel vspacer4 = new JPanel(null);
 
         createAddExpenseButton(vspacer1);
-        createAddIncomeButton(vspacer2);
-        createFilterButton(vspacer3);
+        createRemoveExpenseButton(vspacer2);
+        createAddIncomeButton(vspacer3);
+        createRemoveIncomeButton(vspacer4);
+        //createFilterButton(vspacer3);
         createSaveExitButton();
     }
 
@@ -181,23 +178,41 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         addExpenseButton.addActionListener(this);
     }
 
-    private void createAddIncomeButton(JPanel vspacer2) {
+    private void createRemoveExpenseButton(JPanel vspacer2) {
+        //---- removeExpenseButton ----
+        JButton removeExpenseButton = new JButton("Remove expense");
+        buttonPanel.add(removeExpenseButton);
+        buttonPanel.add(vspacer2);
+        removeExpenseButton.setActionCommand("Remove expense");
+        removeExpenseButton.addActionListener(this);
+    }
+
+    private void createAddIncomeButton(JPanel vspacer3) {
         //---- addIncomeButton ----
         JButton addIncomeButton = new JButton("Add income");
         buttonPanel.add(addIncomeButton);
-        buttonPanel.add(vspacer2);
+        buttonPanel.add(vspacer3);
         addIncomeButton.setActionCommand("Add income");
         addIncomeButton.addActionListener(this);
     }
 
-    private void createFilterButton(JPanel vspacer3) {
-        //---- filterButton ----
-        JButton filterButton = new JButton("Filter");
-        buttonPanel.add(filterButton);
-        buttonPanel.add(vspacer3);
-        filterButton.setActionCommand("Filter");
-        filterButton.addActionListener(this);
+    private void createRemoveIncomeButton(JPanel vspacer4) {
+        //---- removeIncomeButton ----
+        JButton removeIncomeButton = new JButton("Remove income");
+        buttonPanel.add(removeIncomeButton);
+        buttonPanel.add(vspacer4);
+        removeIncomeButton.setActionCommand("Remove income");
+        removeIncomeButton.addActionListener(this);
     }
+
+//    private void createFilterButton(JPanel vspacer3) {
+//        //---- filterButton ----
+//        JButton filterButton = new JButton("Filter");
+//        buttonPanel.add(filterButton);
+//        buttonPanel.add(vspacer3);
+//        filterButton.setActionCommand("Filter");
+//        filterButton.addActionListener(this);
+//    }
 
     private void createSaveExitButton() {
         // Save/exit button
@@ -215,12 +230,18 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
             case "Add expense":
                 new AddExpenseWindow(this);
                 break;
+            case "Remove expense":
+                new RemoveExpenseWindow(this);
+                break;
             case "Add income":
                 new AddIncomeWindow(this);
                 break;
-            case "Filter":
-                filterTransactions();
+            case "Remove income":
+                new RemoveIncomeWindow(this);
                 break;
+//            case "Filter":
+//                filterTransactions();
+//                break;
             case "Save/Exit":
                 new SaveExitWindow(this);
                 break;
@@ -251,38 +272,98 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         //======== totals panel ========
         JPanel totalsPanel = new JPanel();
         totalsPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        totalsPanel.setLayout(new GridLayout(3, 0));
+        totalsPanel.setLayout(new GridLayout(6, 0));
 
-        //---- balance ----
-        JLabel balance = new JLabel("Budget balance: ");
-        balance.setHorizontalAlignment(SwingConstants.CENTER);
-        totalsPanel.add(balance);
-
-        //---- expenseTotal
-        JLabel expenseTotal = new JLabel("Total expenses: ");
-        expenseTotal.setHorizontalAlignment(SwingConstants.CENTER);
-        totalsPanel.add(expenseTotal);
-
-        //---- incomeTotal ----
-        JLabel incomeTotal = new JLabel("Total income:");
-        incomeTotal.setHorizontalAlignment(SwingConstants.CENTER);
-        totalsPanel.add(incomeTotal);
-
+        createBalanceCalculation(totalsPanel);
+        createExpenseCalculation(totalsPanel);
+        createIncomeCalculation(totalsPanel);
         detailPanel.add(totalsPanel);
     }
 
-    private void addExpensesChartPanel() {
-        // income chart panel
-        JPanel incomePanel = new JPanel();
-        incomePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        incomePanel.setLayout(new FlowLayout());
-        detailPanel.add(incomePanel);
-//
-//        ExpensesPieChart expensesPieChart = new ExpensesPieChart();
-//        incomePanel.add(expensesPieChart);
+    private void createBalanceCalculation(JPanel totalsPanel) {
+        JButton calculateBalance = new JButton("Calculate budget balance: ");
+        calculateBalance.setHorizontalAlignment(SwingConstants.CENTER);
+        calculateBalance.setBounds(10, 10, 40, 20);
+
+        JLabel balanceLabel = new JLabel();
+        balanceLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        balanceLabel.setOpaque(true);
+        balanceLabel.setBackground(Color.WHITE);
+
+        totalsPanel.add(calculateBalance);
+        totalsPanel.add(balanceLabel);
+
+        setUpBalanceCalculationButton(calculateBalance, balanceLabel);
     }
 
-    private void addIncomeChartPanel() {
+    private void setUpBalanceCalculationButton(JButton calculateBalance, JLabel balanceLabel) {
+        calculateBalance.setActionCommand("balance");
+        calculateBalance.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getActionCommand().equals("balance")) {
+                    double balance = getUser().getBudgetBalance();
+                    balanceLabel.setText(String.valueOf(balance));
+
+                    if (balance >= 0) {
+                        balanceLabel.setForeground(Color.GREEN);
+                    } else {
+                        balanceLabel.setForeground(Color.RED);
+                    }
+                }
+            }
+        });
+    }
+
+    private void createExpenseCalculation(JPanel totalsPanel) {
+        JButton calculateExpenses = new JButton("Calculate total expenses: ");
+        calculateExpenses.setHorizontalAlignment(SwingConstants.CENTER);
+        calculateExpenses.setBounds(10, 10, 40, 20);
+
+        JLabel totalExpenses = new JLabel();
+        totalExpenses.setHorizontalAlignment(SwingConstants.CENTER);
+        totalExpenses.setOpaque(true);
+        totalExpenses.setBackground(Color.WHITE);
+
+        totalsPanel.add(calculateExpenses);
+        totalsPanel.add(totalExpenses);
+
+        calculateExpenses.setActionCommand("expenses");
+        calculateExpenses.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getActionCommand().equals("expenses")) {
+                    totalExpenses.setText(String.valueOf(getUser().getTotalExpenseAmount()));
+                }
+            }
+        });
+    }
+
+    private void createIncomeCalculation(JPanel totalsPanel) {
+        JButton calculateIncome = new JButton("Calculate total income: ");
+        calculateIncome.setHorizontalAlignment(SwingConstants.CENTER);
+        calculateIncome.setBounds(10, 10, 40, 20);
+
+        JLabel totalIncome = new JLabel();
+        totalIncome.setHorizontalAlignment(SwingConstants.CENTER);
+        totalIncome.setOpaque(true);
+        totalIncome.setBackground(Color.WHITE);
+
+        totalsPanel.add(calculateIncome);
+        totalsPanel.add(totalIncome);
+
+        calculateIncome.setActionCommand("income");
+        calculateIncome.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getActionCommand().equals("income")) {
+                    totalIncome.setText(String.valueOf(getUser().getTotalIncomeAmount()));
+                }
+            }
+        });
+    }
+
+    private void addExpensesChartPanel() {
         // expenses chart panel
         JPanel expensesPanel = new JPanel();
         expensesPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -290,8 +371,56 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         detailPanel.add(expensesPanel);
 
         pane.add(detailPanel);
+
+        JButton expensesChartButton = new JButton("Generate expense pie chart");
+        expensesChartButton.setActionCommand("expenses chart");
+        setUpExpensesChartButton(expensesChartButton, this);
+
+        expensesPanel.add(expensesChartButton);
     }
 
+    private void setUpExpensesChartButton(JButton expensesChartButton, BudgetAppGUI budgetAppGUI) {
+        expensesChartButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getActionCommand().equals("expenses chart")) {
+                    ExpensesPieChart expensesPieChart = new ExpensesPieChart(budgetAppGUI);
+                    expensesPieChart.setSize(560, 367);
+                    RefineryUtilities.centerFrameOnScreen(expensesPieChart);
+                    expensesPieChart.setVisible(true);
+                }
+            }
+        });
+    }
+
+    private void addIncomeChartPanel() {
+        // income chart panel
+        JPanel incomePanel = new JPanel();
+        incomePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        incomePanel.setLayout(new FlowLayout());
+        detailPanel.add(incomePanel);
+
+        //createIncomeChart(incomePanel);
+        JButton incomeChartButton = new JButton("Generate income pie chart");
+        incomeChartButton.setActionCommand("income chart");
+        setUpIncomeChartButton(incomeChartButton, this);
+
+        incomePanel.add(incomeChartButton);
+    }
+
+    private void setUpIncomeChartButton(JButton incomeChartButton, BudgetAppGUI budgetAppGUI) {
+        incomeChartButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getActionCommand().equals("income chart")) {
+                    IncomePieChart incomePieChart = new IncomePieChart(budgetAppGUI);
+                    incomePieChart.setSize(560, 367);
+                    RefineryUtilities.centerFrameOnScreen(incomePieChart);
+                    incomePieChart.setVisible(true);
+                }
+            }
+        });
+    }
 
     private void createBudgetPanel() {
         budgetPanel = new JPanel();
@@ -332,15 +461,15 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
     }
 
     private void addTransactionDetails() {
-        transactionArray = getArrayOfCostDetails();
+        transactionArray = getArrayOfTransactionDetails();
 
-        for (int i = 0; i < transactionArray.length; i++) {
-            tableModel.addRow(transactionArray[i]);
+        for (Object[] transaction : transactionArray) {
+            tableModel.addRow(transaction);
         }
     }
 
 
-    private Object[][] getArrayOfCostDetails() {
+    private Object[][] getArrayOfTransactionDetails() {
         ArrayList<Transaction> transactions = user.getAllTransactions().getTransactions();
 
         transactionArray = new Object[transactions.size()][];
@@ -368,16 +497,40 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         return transactionArray;
     }
 
-    public void updateTable() {
+    public void updateTableWithAddedTransaction() {
         addMostRecentTransactionToTable();
         budgetTable.updateUI();
         budgetPanel.updateUI();
     }
 
     private void addMostRecentTransactionToTable() {
-        transactionArray = getArrayOfCostDetails();
+        transactionArray = getArrayOfTransactionDetails();
 
         int i = transactionArray.length - 1;
         tableModel.addRow(transactionArray[i]);
+    }
+
+    public void updateTableWithRemovedTransaction(Transaction t) {
+        removeSpecifiedTransactionFromTable(t);
+        budgetTable.updateUI();
+        budgetPanel.updateUI();
+    }
+
+
+    private void removeSpecifiedTransactionFromTable(Transaction transaction) {
+        ArrayList<Transaction> transactions = getUser().getAllTransactions().getTransactions();
+
+        for (Transaction t : transactions) {
+            if (t.equals(transaction)) {
+                int index = getIndex(transactions, t);
+                getUser().removeTransaction(t);
+                tableModel.removeRow(index);
+                break;
+            }
+        }
+    }
+
+    private int getIndex(ArrayList<Transaction> transactions, Transaction t) {
+        return transactions.indexOf(t);
     }
 }

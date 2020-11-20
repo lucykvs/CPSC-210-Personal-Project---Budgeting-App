@@ -22,6 +22,12 @@ public class Transactions {
         transactions.add(t);
     }
 
+    public void removeTransaction(Transaction t) {
+        if (transactions.remove(t)) {
+            System.out.println("Transaction removed");
+        }
+    }
+
     // REQUIRES: amount >= 0
     // MODIFIES: this
     // EFFECTS: adds a new transaction to the collection of transactions

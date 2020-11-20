@@ -58,18 +58,24 @@ public class User implements Writable {
     // EFFECTS: adds a cost to user's expenses
     public void addCost(Category category, String description, double amount) {
         expenses.addCost(category, description, amount);
-        addTransaction(new Cost(category, description, amount));
+        addToAllTransactions(new Cost(category, description, amount));
     }
 
     // MODIFIES: this
     // EFFECTS: adds a fund to user's income
     public void addFund(Category category, String description, double amount) {
         income.addFund(category, description, amount);
-        addTransaction(new Fund(category, description, amount));
+        addToAllTransactions(new Fund(category, description, amount));
     }
 
-    public void addTransaction(Transaction transaction) {
+    public void addToAllTransactions(Transaction transaction) {
         allTransactions.addTransaction(transaction);
+    }
+
+    public void removeTransaction(Transaction transaction) {
+        allTransactions.removeTransaction(transaction);
+        expenses.removeTransaction(transaction);
+        income.removeTransaction(transaction);
     }
 
     // EFFECTS: returns JSON representation of user
@@ -77,29 +83,9 @@ public class User implements Writable {
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("username", name);
-//        json.put("income", incomeToJson());
-//        json.put("expenses", expensesToJson());
         json.put("transactions", transactionsToJson());
         return json;
     }
-
-//    // EFFECTS: returns income in this user's budget as a JSON array
-//    private JSONArray incomeToJson() {
-//        JSONArray jsonArray;
-//
-//        jsonArray = income.transactionsToJson();
-//
-//        return jsonArray;
-//    }
-//
-//    // EFFECTS: returns expenses in this user's budget as a JSON array
-//    private JSONArray expensesToJson() {
-//        JSONArray jsonArray;
-//
-//        jsonArray = expenses.transactionsToJson();
-//
-//        return jsonArray;
-//    }
 
     // EFFECTS: returns expenses in this user's budget as a JSON array
     private JSONArray transactionsToJson() {

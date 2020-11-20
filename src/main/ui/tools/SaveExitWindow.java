@@ -102,7 +102,7 @@ public class SaveExitWindow extends JFrame implements ActionListener {
 
         try {
             jsonWriter.open();
-            jsonWriter.write(BudgetAppGUI.getUser());
+            jsonWriter.write(budgetAppGUI.getUser());
             jsonWriter.close();
             savedMessage();
         } catch (FileNotFoundException e) {
@@ -115,7 +115,7 @@ public class SaveExitWindow extends JFrame implements ActionListener {
 
         savedMessage.setMinimumSize(new Dimension(400, 100));
         savedMessage.setLocationRelativeTo(null);
-        savedMessage.add(new JLabel(new StringBuilder().append("Successfully saved ").append(BudgetAppGUI.getUser()
+        savedMessage.add(new JLabel(new StringBuilder().append("Successfully saved ").append(budgetAppGUI.getUser()
                 .getName()).append("'s budget to ").append(JSON_STORE).append(".").toString()));
         savedMessage.setSize(100, 100);
         savedMessage.setVisible(true);
