@@ -22,10 +22,8 @@ public class Transactions {
         transactions.add(t);
     }
 
-    public void removeTransaction(Transaction t) {
-        if (transactions.remove(t)) {
-            System.out.println("Transaction removed");
-        }
+    public boolean removeTransaction(Transaction t) {
+        return transactions.remove(t);
     }
 
     // REQUIRES: amount >= 0

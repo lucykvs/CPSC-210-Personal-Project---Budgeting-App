@@ -72,10 +72,10 @@ public class User implements Writable {
         allTransactions.addTransaction(transaction);
     }
 
-    public void removeTransaction(Transaction transaction) {
-        allTransactions.removeTransaction(transaction);
+    public boolean removeTransaction(Transaction transaction) {
         expenses.removeTransaction(transaction);
         income.removeTransaction(transaction);
+        return allTransactions.removeTransaction(transaction);
     }
 
     // EFFECTS: returns JSON representation of user

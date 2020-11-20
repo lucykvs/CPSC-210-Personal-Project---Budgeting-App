@@ -510,24 +510,28 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         tableModel.addRow(transactionArray[i]);
     }
 
-    public void updateTableWithRemovedTransaction(Transaction t) {
-        removeSpecifiedTransactionFromTable(t);
-        budgetTable.updateUI();
-        budgetPanel.updateUI();
+    public boolean updateTableWithRemovedTransaction(Transaction t) {
+        if (removeSpecifiedTransactionFromTable(t)) {
+            budgetTable.updateUI();
+            budgetPanel.updateUI();
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
-    private void removeSpecifiedTransactionFromTable(Transaction transaction) {
+    private boolean removeSpecifiedTransactionFromTable(Transaction transaction) {
         ArrayList<Transaction> transactions = getUser().getAllTransactions().getTransactions();
 
         for (Transaction t : transactions) {
             if (t.equals(transaction)) {
                 int index = getIndex(transactions, t);
-                getUser().removeTransaction(t);
                 tableModel.removeRow(index);
-                break;
+                return getUser().removeTransaction(t);
             }
         }
+        return false;
     }
 
     private int getIndex(ArrayList<Transaction> transactions, Transaction t) {

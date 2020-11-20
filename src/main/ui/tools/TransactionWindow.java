@@ -113,15 +113,16 @@ public abstract class TransactionWindow implements ActionListener {
 
         frame.dispose();
 
-        successMessage("Successfully added " + type + " to your list of " + listType + ".");
+        responseMessage("Successfully added " + type + " to your list of " + listType + ".");
     }
 
     protected void removeTransactionFromDetailsEntered(Transaction t, String listType) {
-        budgetAppGUI.updateTableWithRemovedTransaction(t);
-
+        if (budgetAppGUI.updateTableWithRemovedTransaction(t)) {
+            responseMessage("Successfully removed " + type + " from your list of " + listType + ".");
+        } else {
+            responseMessage("Could not find " + type + " in your list of " + listType + ".");
+        }
         frame.dispose();
-
-        successMessage("Successfully removed " + type + " from your list of " + listType + ".");
     }
 
     protected void playAddTransactionSound() {
@@ -138,12 +139,12 @@ public abstract class TransactionWindow implements ActionListener {
         }
     }
 
-    protected void successMessage(String message) {
+    protected void responseMessage(String message) {
         JDialog successMessage = new JDialog();
 
         successMessage.setLocationRelativeTo(null);
         successMessage.add(new JLabel(message));
-        successMessage.setSize(300, 100);
+        successMessage.setSize(400, 100);
         successMessage.setVisible(true);
     }
 
