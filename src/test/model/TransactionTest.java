@@ -54,7 +54,8 @@ public class TransactionTest {
 
         assertEquals(transaction1, transaction1);
         assertNotEquals(transactionNull, transaction1);
-        assertNotEquals(c, transaction1);
+        assertFalse(transaction1.equals(null));
+        assertFalse(transaction1.equals(c));
         assertNotEquals(transaction2, transaction1);
         assertEquals(transaction3, transaction1);
         assertNotEquals(transaction4, transaction1);

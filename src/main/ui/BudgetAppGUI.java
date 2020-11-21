@@ -27,6 +27,7 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
     private static User user;
     private Object[][] transactionArray;
     private Container pane;
+    private JComboBox<String> filterBox;
 
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
@@ -172,9 +173,17 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
 
         buttonPanel.setLayout(new GridLayout(9, 0));
         JPanel vspacer1 = new JPanel(null);
+        vspacer1.setBackground(Color.WHITE);
+        vspacer1.setOpaque(true);
         JPanel vspacer2 = new JPanel(null);
+        vspacer2.setBackground(Color.WHITE);
+        vspacer2.setOpaque(true);
         JPanel vspacer3 = new JPanel(null);
+        vspacer3.setBackground(Color.WHITE);
+        vspacer3.setOpaque(true);
         JPanel vspacer4 = new JPanel(null);
+        vspacer4.setBackground(Color.WHITE);
+        vspacer4.setOpaque(true);
 
         createAddExpenseButton(vspacer1);
         createRemoveExpenseButton(vspacer2);
@@ -274,11 +283,10 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
                         javax.swing.border.TitledBorder.TOP, new Font("Arial", Font.BOLD, 14),
                         Color.blue)));
 
-        detailPanel.setLayout(new GridLayout(1, 3));
+        detailPanel.setLayout(new GridLayout(1, 2));
 
         addTotalsPanel();
-        addExpensesChartPanel();
-        addIncomeChartPanel();
+        addChartPanel();
     }
 
     // MODIFIES: detailsPanel
@@ -386,21 +394,42 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
     }
 
     // MODIFIES: totalsPanel
-    // EFFECTS: creates panel that houses options for getting expense details; button for opening
-    //          expensePieChart
-    private void addExpensesChartPanel() {
-        JPanel expensesPanel = new JPanel();
-        expensesPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        expensesPanel.setLayout(new FlowLayout());
-        detailPanel.add(expensesPanel);
-
+    // EFFECTS: creates panel that houses options for getting expense details; buttons for opening
+    //          expensePieChart, incomePieChart, and filtering table
+    private void addChartPanel() {
+        JPanel chartPanel = new JPanel();
+        chartPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        chartPanel.setLayout(new GridLayout(6, 0));
+        detailPanel.add(chartPanel);
         pane.add(detailPanel);
+        chartPanel.setOpaque(true);
 
+        chartPanel.setBackground(Color.white);
         JButton expensesChartButton = new JButton("Generate expense pie chart");
         expensesChartButton.setActionCommand("expenses chart");
         setUpExpensesChartButton(expensesChartButton, this);
 
-        expensesPanel.add(expensesChartButton);
+        JButton incomeChartButton = new JButton("Generate income pie chart");
+        incomeChartButton.setActionCommand("income chart");
+        setUpIncomeChartButton(incomeChartButton, this);
+
+        addButtonsToDetailPanel(chartPanel, expensesChartButton, incomeChartButton);
+    }
+
+    // MODIFIES: detailPanel
+    // EFFECTS: adds buttons to detailPanel, with vertical spacer panels
+    private void addButtonsToDetailPanel(JPanel chartPanel, JButton expensesChartButton, JButton incomeChartButton) {
+        JPanel vspace1 = new JPanel(null);
+        JPanel vspace2 = new JPanel(null);
+        vspace1.setOpaque(true);
+        vspace1.setBackground(Color.white);
+        vspace2.setOpaque(true);
+        vspace2.setBackground(Color.white);
+
+        chartPanel.add(expensesChartButton);
+        chartPanel.add(vspace1);
+        chartPanel.add(incomeChartButton);
+        createFilterBox(chartPanel);
     }
 
     // EFFECTS: when expensesChartButton is clicked, opens new ExpensePieChart window
@@ -418,22 +447,6 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         });
     }
 
-    // MODIFIES: totalsPanel
-    // EFFECTS: creates panel that houses options for getting income details; button for opening
-    //          incomePieChart
-    private void addIncomeChartPanel() {
-        JPanel incomePanel = new JPanel();
-        incomePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        incomePanel.setLayout(new FlowLayout());
-        detailPanel.add(incomePanel);
-
-        JButton incomeChartButton = new JButton("Generate income pie chart");
-        incomeChartButton.setActionCommand("income chart");
-        setUpIncomeChartButton(incomeChartButton, this);
-
-        incomePanel.add(incomeChartButton);
-    }
-
     // EFFECTS: when incomeChartButton is clicked, opens new IncomePieChart window
     private void setUpIncomeChartButton(JButton incomeChartButton, BudgetAppGUI budgetAppGUI) {
         incomeChartButton.addActionListener(new ActionListener() {
@@ -449,6 +462,47 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
         });
     }
 
+    // MODIFIES: detailPanel
+    // EFFECTS: creates filter button to show only expenses or only income in budgetTable
+    private void createFilterBox(JPanel chartPanel) {
+        JLabel filterLabel = new JLabel("Filter table by:");
+        String[] filterOptions = {"All transactions", "Expenses only", "Income only"};
+        filterBox = new JComboBox<>(filterOptions);
+        JPanel vspace = new JPanel(null);
+        vspace.setOpaque(true);
+        vspace.setBackground(Color.white);
+
+        chartPanel.add(filterLabel);
+        chartPanel.add(filterBox);
+        chartPanel.add(vspace);
+
+        filterBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String s = (String) filterBox.getSelectedItem();
+                filterTable(s);
+            }
+        });
+    }
+
+    // MODIFIES: budgetPanel
+    // EFFECTS: filters table based on selection from filterBox
+    private void filterTable(String s) {
+        if (s.equals("All transactions")) {
+            ArrayList<Transaction> transactions = user.getAllTransactions().getTransactions();
+            transactionArray = new Object[transactions.size()][];
+            createBudgetTable(transactions, transactionArray);
+        } else if (s.equals("Expenses only")) {
+            ArrayList<Transaction> transactions = user.getExpenses().getTransactions();
+            transactionArray = new Object[transactions.size()][];
+            createBudgetTable(transactions, transactionArray);
+        } else {
+            ArrayList<Transaction> transactions = user.getIncome().getTransactions();
+            transactionArray = new Object[transactions.size()][];
+            createBudgetTable(transactions, transactionArray);
+        }
+    }
+
     // MODIFIES: this
     // EFFECTS: creates lower left panel to display budget in table format
     private void createBudgetPanel() {
@@ -461,17 +515,20 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
                         javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP,
                         new Font("Arial", Font.BOLD, 14), Color.blue)));
 
-        createBudgetTable();
+        ArrayList<Transaction> transactions = user.getAllTransactions().getTransactions();
+        transactionArray = new Object[transactions.size()][];
+        createBudgetTable(transactions, transactionArray);
     }
 
     // MODIFIES: this, budgetPanel
     // EFFECTS: creates budgetTable and adds it to budgetPanel
-    private void createBudgetTable() {
+    private void createBudgetTable(ArrayList<Transaction> transactions, Object[][] transactionArray) {
+        budgetPanel.removeAll();
         tableModel = new DefaultTableModel();
         budgetTable = new JTable(tableModel);
 
         addTableColumns();
-        addTransactionDetails();
+        addTransactionDetails(transactions, transactionArray);
 
         budgetTable.setColumnSelectionAllowed(true);
         budgetTable.setFillsViewportHeight(true);
@@ -481,6 +538,9 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
 
         budgetPanel.add(scrollPane);
         pane.add(budgetPanel);
+
+        budgetTable.updateUI();
+        budgetPanel.updateUI();
     }
 
     // EFFECTS: creates String array of column names for budgetTable
@@ -494,8 +554,8 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
 
     // MODIFIES: budgetTable
     // EFFECTS: gets array of all transaction details and adds each transaction to budgetTable
-    private void addTransactionDetails() {
-        transactionArray = getArrayOfTransactionDetails();
+    private void addTransactionDetails(ArrayList<Transaction> transactions, Object[][] transactionArray) {
+        getArrayOfTransactionDetails(transactions, transactionArray);
 
         for (Object[] transaction : transactionArray) {
             tableModel.addRow(transaction);
@@ -504,11 +564,7 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
 
     // EFFECTS: gets transaction information from this user and puts it into an array for use in
     //          budgetTable
-    private Object[][] getArrayOfTransactionDetails() {
-        ArrayList<Transaction> transactions = user.getAllTransactions().getTransactions();
-
-        transactionArray = new Object[transactions.size()][];
-
+    private Object[][] getArrayOfTransactionDetails(ArrayList<Transaction> transactions, Object[][] transactionArray) {
         int i = 0;
         String type;
 
@@ -544,7 +600,10 @@ public class BudgetAppGUI extends JFrame implements ActionListener {
     // EFFECTS: gets most recent transaction added to array of transaction details and adds it
     //          to budgetTable
     private void addMostRecentTransactionToTable() {
-        transactionArray = getArrayOfTransactionDetails();
+        ArrayList<Transaction> transactions = user.getAllTransactions().getTransactions();
+        transactionArray = new Object[transactions.size()][];
+
+        transactionArray = getArrayOfTransactionDetails(transactions, transactionArray);
 
         int i = transactionArray.length - 1;
         tableModel.addRow(transactionArray[i]);

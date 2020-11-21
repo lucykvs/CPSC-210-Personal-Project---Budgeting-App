@@ -1,0 +1,53 @@
+{
+    "transactions": [
+        {
+            "amount": 800,
+            "description": "Rent",
+            "category": "BILLS",
+            "type": "expense"
+        },
+        {
+            "amount": 80,
+            "description": "Wifi",
+            "category": "BILLS",
+            "type": "expense"
+        },
+        {
+            "amount": 2000,
+            "description": "Work",
+            "category": "EMPLOYMENT",
+            "type": "income"
+        },
+        {
+            "amount": 2300.24,
+            "description": "Student loans",
+            "category": "LOAN",
+            "type": "income"
+        },
+        {
+            "amount": 899,
+            "description": "Car!!!",
+            "category": "MISCELLANEOUS_PURCHASES",
+            "type": "expense"
+        },
+        {
+            "amount": 85,
+            "description": "Groceries",
+            "category": "ONE_TIME_EXPENSES",
+            "type": "expense"
+        },
+        {
+            "amount": 2832,
+            "description": "Loan payments?",
+            "category": "DEBT_REPAYMENTS",
+            "type": "expense"
+        },
+        {
+            "amount": 5000,
+            "description": "Christmas",
+            "category": "GIFT",
+            "type": "income"
+        }
+    ],
+    "username": "Lucy"
+}
