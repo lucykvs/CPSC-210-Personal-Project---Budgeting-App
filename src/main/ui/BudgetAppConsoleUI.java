@@ -1,6 +1,7 @@
 package ui;
 
 import model.Category;
+import model.NegativeAmountException;
 import model.User;
 import persistence.JsonReader;
 import persistence.JsonWriter;
@@ -129,9 +130,9 @@ public class BudgetAppConsoleUI {
         System.out.print("\tEnter amount of cost: $");
         double amount = input.nextDouble();
 
-        if (amount >= 0.0) {
+        try {
             user.addCost(category, description, amount);
-        } else {
+        } catch (NegativeAmountException e) {
             System.out.println("\tCannot have a negative cost.\n");
         }
     }
@@ -178,9 +179,9 @@ public class BudgetAppConsoleUI {
         System.out.print("\tEnter amount of income: $");
         double amount = input.nextDouble();
 
-        if (amount >= 0.0) {
+        try {
             user.addFund(category, description, amount);
-        } else {
+        } catch (NegativeAmountException e) {
             System.out.println("Cannot have a negative income.\n");
         }
     }

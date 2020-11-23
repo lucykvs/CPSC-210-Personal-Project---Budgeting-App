@@ -1,6 +1,7 @@
 package ui.tools;
 
 import model.Category;
+import model.NegativeAmountException;
 import ui.BudgetAppGUI;
 
 import java.awt.event.ActionEvent;
@@ -10,7 +11,7 @@ public class AddIncomeWindow extends TransactionWindow {
     protected String listType = "incomes";
     protected String[] catOptions = {"Employment", "Loan", "Gift", "Other"};
 
-    // EFFECTS: constructs new AddIncomeeWindow
+    // EFFECTS: constructs new AddIncomeWindow
     public AddIncomeWindow(BudgetAppGUI budgetAppGUI) {
         super(budgetAppGUI, "Add income", "source of income");
         initializePanelSetup(catOptions);
@@ -19,16 +20,26 @@ public class AddIncomeWindow extends TransactionWindow {
     // EFFECTS: when add button is clicked, gets income details entered and adds income
     @Override
     public void actionPerformed(ActionEvent e) {
-        getTransactionDetailsFromTransactionWindow(e);
-        addIncomeFromDetailsEntered();
+        try {
+            getTransactionDetailsFromTransactionWindow(e);
+            addIncomeFromDetailsEntered();
+        } catch (NumberFormatException ex1) {
+            responseMessage(ex1.getMessage());
+        } catch (NegativeAmountException ex2) {
+            responseMessage("Amount cannot be negative.");
+        }
     }
 
     // MODIFIES: BudgetAppGUI
     // EFFECTS: from details entered, adds income to user's budget
     protected void addIncomeFromDetailsEntered() {
-        Category cat = getFundCatFromString(category);
-        budgetAppGUI.getUser().addFund(cat, description, amount);
-        updateUIWithTransactionFromDetailsEntered(listType);
+        try {
+            Category cat = getFundCatFromString(category);
+            budgetAppGUI.getUser().addFund(cat, description, amount);
+            updateUIWithTransactionFromDetailsEntered(listType);
+        } catch (NegativeAmountException e) {
+            responseMessage("Amount cannot be negative.");
+        }
     }
 
     // EFFECTS: returns category associated with given label

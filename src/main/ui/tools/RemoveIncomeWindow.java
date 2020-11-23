@@ -2,6 +2,7 @@ package ui.tools;
 
 import model.Category;
 import model.Fund;
+import model.NegativeAmountException;
 import ui.BudgetAppGUI;
 
 import java.awt.event.ActionEvent;
@@ -20,15 +21,20 @@ public class RemoveIncomeWindow extends TransactionWindow {
     // EFFECTS: when add button is clicked, gets income details entered and removes income
     @Override
     public void actionPerformed(ActionEvent e) {
-        getTransactionDetailsFromTransactionWindow(e);
-        removeIncomeFromDetailsEntered();
+        try {
+            getTransactionDetailsFromTransactionWindow(e);
+            removeIncomeFromDetailsEntered();
+        } catch (NumberFormatException ex1) {
+            responseMessage(ex1.getMessage());
+        } catch (NegativeAmountException ex2) {
+            responseMessage("Amount cannot be negative.");
+        }
     }
 
     // MODIFIES: BudgetAppGUI
     // EFFECTS: from details entered, removes income from user's budget
     protected void removeIncomeFromDetailsEntered() {
         Category cat = getFundCatFromString(category);
-
         removeTransactionFromDetailsEntered(new Fund(cat, description, amount), listType);
     }
 

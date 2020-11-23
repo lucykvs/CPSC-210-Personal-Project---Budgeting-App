@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTest {
     private User user;
@@ -48,8 +48,12 @@ public class UserTest {
 
     @Test
     public void testGetTotalExpenseAmountSomeExpenses() {
-        user.addCost(cc1,"Groceries", 150);
-        user.addCost(cc1,"Gas",90);
+        try {
+            user.addCost(cc1, "Groceries", 150);
+            user.addCost(cc1, "Gas", 90);
+        } catch (NegativeAmountException e) {
+            fail("NegativeAmountException thrown, should not have thrown exception.");
+        }
         assertEquals(2, user.getAllTransactions().getTransactions().size());
 
         assertEquals(150+90,user.getTotalExpenseAmount());
@@ -64,8 +68,12 @@ public class UserTest {
 
     @Test
     public void testGetBudgetBalanceSomeExpensesEmptyIncome() {
-        user.getExpenses().addCost(cc1,"Groceries", 150);
-        user.getExpenses().addCost(cc1,"Gas",90);
+        try {
+            user.addCost(cc1, "Groceries", 150);
+            user.addCost(cc1, "Gas", 90);
+        } catch (NegativeAmountException e) {
+            fail("NegativeAmountException thrown, should not have thrown exception.");
+        }
 
         double balance = user.getBudgetBalance();
 
@@ -74,8 +82,12 @@ public class UserTest {
 
     @Test
     public void testBalanceBudgetEmptyExpensesSomeIncome() {
-        user.getIncome().addFund(fc1,"Work", 2000);
-        user.getIncome().addFund(fc4,"Bursary",1200);
+        try {
+            user.addFund(fc1, "Work", 2000);
+            user.addFund(fc4, "Bursary", 1200);
+        } catch (NegativeAmountException e) {
+            fail("NegativeAmountException thrown, should not have thrown exception.");
+        }
 
         double balance = user.getBudgetBalance();
 
@@ -84,10 +96,14 @@ public class UserTest {
 
     @Test
     public void testBalanceBudgetSomeExpensesSomeIncome() {
-        user.getExpenses().addCost(cc1,"Groceries", 150);
-        user.getExpenses().addCost(cc1,"Gas",90);
-        user.getIncome().addFund(fc1,"Work", 2000);
-        user.getIncome().addFund(fc4,"Bursary",1200);
+        try {
+            user.addCost(cc1, "Groceries", 150);
+            user.addCost(cc1, "Gas", 90);
+            user.addFund(fc1, "Work", 2000);
+            user.addFund(fc4, "Bursary", 1200);
+        } catch (NegativeAmountException e) {
+            fail("NegativeAmountException thrown, should not have thrown exception.");
+        }
 
         double balance = user.getBudgetBalance();
 
@@ -107,9 +123,13 @@ public class UserTest {
 
     @Test
     public void testToJsonUserWithGeneralBudget() {
-        user.addCost(cc1,"Groceries", 150);
-        user.addCost(cc2,"Student loan payments", 200);
-        user.addFund(fc1,"Work", 2000);
+        try {
+            user.addCost(cc1, "Groceries", 150);
+            user.addCost(cc2, "Student loan payments", 200);
+            user.addFund(fc1, "Work", 2000);
+        } catch (NegativeAmountException e) {
+            fail("NegativeAmountException thrown, should not have thrown exception.");
+        }
         JSONObject json = user.toJson();
 
         String username = json.getString("username");
@@ -120,15 +140,119 @@ public class UserTest {
     }
 
     @Test
-    public void testRemoveTransaction() {
+    public void testRemoveTransactionNoException() {
+        try {
         user.addFund(fc1,"Work", 2000);
         user.addFund(fc4,"Bursary",1200);
+        } catch (NegativeAmountException e) {
+            fail("NegativeAmountException thrown, should not have thrown exception.");
+        }
 
         assertEquals(2, user.getAllTransactions().getTransactions().size());
 
         user.removeTransaction(new Fund(fc1, "Work", 2000));
+
         assertEquals(1, user.getAllTransactions().getTransactions().size());
         assertEquals(1, user.getIncome().getTransactions().size());
+    }
+
+    @Test
+    public void testRemoveTransactionNegativeInputExceptionThrown() {
+        try {
+            user.addFund(fc1,"Work", 2000);
+            user.addFund(fc4,"Bursary",1200);
+        } catch (NegativeAmountException e) {
+            fail("NegativeAmountException thrown, should not have thrown exception.");
+        }
+
+        assertEquals(2, user.getAllTransactions().getTransactions().size());
+
+        user.removeTransaction(new Fund(fc1, "Work", -2000));
+
+        assertEquals(2, user.getAllTransactions().getTransactions().size());
+        assertEquals(2, user.getIncome().getTransactions().size());
+    }
+
+    @Test
+    public void testAddFundNoExceptionThrown() {
+        try {
+            user.addFund(fc1,"Work", 2000);
+            user.addFund(fc4,"Bursary",1200);
+        } catch (NegativeAmountException e) {
+            fail("NegativeAmountException thrown, should not have thrown exception.");
+        }
+
+        assertEquals(2, user.getAllTransactions().getTransactions().size());
+    }
+
+    @Test
+    public void testAddFundNegativeInputExceptionThrownOneAdded() {
+        try {
+            user.addFund(fc1, "Work", 2000);
+            user.addFund(fc4, "Bursary", -1200);
+            fail("NegativeAmountException should have been thrown.");
+        } catch (NumberFormatException e) {
+            fail("NumberFormatException thrown, should have thrown NegativeAmountException");
+        } catch (NegativeAmountException e) {
+            // expected behaviour
+        }
+
+        assertEquals(1, user.getAllTransactions().getTransactions().size());
+    }
+
+    @Test
+    public void testAddFundNegativeInputExceptionThrownNoneAdded() {
+        try {
+            user.addFund(fc1,"Work", -2000);
+            user.addFund(fc4,"Bursary",1200);
+            fail("NumberFormatException should have been thrown.");
+        } catch (NegativeAmountException e) {
+            // expected behaviour
+        }
+
+        assertEquals(0, user.getAllTransactions().getTransactions().size());
+    }
+
+    @Test
+    public void testAddCostNoExceptionThrown() {
+        try {
+            user.addCost(cc1,"Rent", 800);
+            user.addCost(cc2,"Student loan payments",1200);
+        } catch (Exception e) {
+            fail("NegativeAmountException thrown, should not have thrown exception.");
+        }
+
+        assertEquals(2, user.getAllTransactions().getTransactions().size());
+    }
+
+    @Test
+    public void testAddCostNegativeInputExceptionThrownOneAdded() {
+        try {
+            user.addCost(cc1, "Rent", 800);
+            user.addCost(cc2, "Student loan payments", -1200);
+            fail("NegativeAmountException should have been thrown.");
+        } catch (NumberFormatException e) {
+            fail("NumberFormatException thrown, should have thrown NegativeAmountException.");
+        } catch (NegativeAmountException e) {
+            // expected behaviour
+        }
+
+        assertEquals(1, user.getAllTransactions().getTransactions().size());
+    }
+
+    @Test
+    public void testAddCostNegativeInputExceptionThrownNoneAdded() {
+        try {
+            user.addCost(cc1, "Rent", -800);
+            user.addCost(cc2, "Student loan payments", 1200);
+            fail("NegativeInputException should have been thrown.");
+        } catch (NumberFormatException e) {
+            fail("NumberFormatException thrown, should have thrown NegativeAmountException");
+        } catch (NegativeAmountException e) {
+            // expected behaviour
+        }
+
+        assertEquals(0, user.getAllTransactions().getTransactions().size());
     }
 }
 

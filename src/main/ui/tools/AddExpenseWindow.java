@@ -1,6 +1,8 @@
 package ui.tools;
 
+import com.sun.org.apache.xpath.internal.operations.Neg;
 import model.Category;
+import model.NegativeAmountException;
 import ui.BudgetAppGUI;
 
 import java.awt.event.ActionEvent;
@@ -19,16 +21,26 @@ public class AddExpenseWindow extends TransactionWindow {
     // EFFECTS: when add button is clicked, gets expense details entered and adds expense
     @Override
     public void actionPerformed(ActionEvent e) {
-        getTransactionDetailsFromTransactionWindow(e);
-        addExpenseFromDetailsEntered();
+        try {
+            getTransactionDetailsFromTransactionWindow(e);
+            addExpenseFromDetailsEntered();
+        } catch (NumberFormatException ex1) {
+            responseMessage(ex1.getMessage());
+        } catch (NegativeAmountException ex2) {
+            responseMessage("Amount cannot be negative.");
+        }
     }
 
     // MODIFIES: BudgetAppGUI
     // EFFECTS: from details entered, adds expense to user's budget
     protected void addExpenseFromDetailsEntered() {
-        Category cat = getCostCatFromString(category);
-        budgetAppGUI.getUser().addCost(cat, description, amount);
-        updateUIWithTransactionFromDetailsEntered(listType);
+        try {
+            Category cat = getCostCatFromString(category);
+            budgetAppGUI.getUser().addCost(cat, description, amount);
+            updateUIWithTransactionFromDetailsEntered(listType);
+        } catch (NegativeAmountException e) {
+            responseMessage("Amount cannot be negative.");
+        }
     }
 
     // EFFECTS: returns category associated with given label

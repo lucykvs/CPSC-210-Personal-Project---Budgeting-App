@@ -27,7 +27,6 @@ public class Transactions {
         return transactions.remove(t);
     }
 
-    // REQUIRES: amount >= 0
     // MODIFIES: this
     // EFFECTS: adds a new cost to the collection of transactions
     public void addCost(Category category, String description, double amount) {
@@ -35,7 +34,6 @@ public class Transactions {
         transactions.add(t);
     }
 
-    // REQUIRES: amount >= 0
     // MODIFIES: this
     // EFFECTS: adds a new fund to the collection of transactions
     public void addFund(Category category, String description, double amount) {

@@ -1,5 +1,6 @@
 package ui.tools;
 
+import model.NegativeAmountException;
 import model.Transaction;
 import ui.BudgetAppGUI;
 
@@ -105,12 +106,20 @@ public abstract class TransactionWindow implements ActionListener {
     }
 
     // EFFECTS: gets details of transaction entered when add button is pressed
-    protected void getTransactionDetailsFromTransactionWindow(ActionEvent e) {
+    protected void getTransactionDetailsFromTransactionWindow(ActionEvent e) throws NumberFormatException,
+            NegativeAmountException {
         if (e.getActionCommand().equals("Add") || e.getActionCommand().equals("Remove")) {
 
             category = (String) categoryOptions.getSelectedItem();
             description = descriptionField.getText();
-            amount = Double.parseDouble(amountField.getText());
+            try {
+                amount = Double.parseDouble(amountField.getText());
+                if (amount < 0) {
+                    throw new NegativeAmountException();
+                }
+            } catch (NumberFormatException ex) {
+                throw new NumberFormatException("Amount must be a number.");
+            }
         }
     }
 

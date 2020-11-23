@@ -72,7 +72,9 @@ class JsonWriterTest extends JsonTest {
             checkCost(cc3,"Tuition", 3050, costs.get(1));
 
         } catch (IOException e) {
-            fail("Exception should not have been thrown");
+            fail("Exception should not have been thrown.");
+        } catch (NegativeAmountException e) {
+            fail("NegativeAmountException should not have been thrown.");
         }
     }
 }

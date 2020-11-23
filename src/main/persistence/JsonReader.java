@@ -1,6 +1,8 @@
 package persistence;
 
-import model.*;
+import model.Category;
+import model.NegativeAmountException;
+import model.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -65,10 +67,15 @@ public class JsonReader {
         double amount = jsonObject.getDouble("amount");
         String type = jsonObject.getString("type");
 
-        if (type.equals("income")) {
-            user.addFund(category, description, amount);
-        } else {
-            user.addCost(category, description, amount);
+        try {
+            if (type.equals("income")) {
+                user.addFund(category, description, amount);
+            } else {
+                user.addCost(category, description, amount);
+            }
+        } catch (NegativeAmountException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 }

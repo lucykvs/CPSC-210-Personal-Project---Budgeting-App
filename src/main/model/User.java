@@ -1,5 +1,6 @@
 package model;
 
+import com.sun.org.apache.xpath.internal.operations.Neg;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
@@ -58,16 +59,26 @@ public class User implements Writable {
 
     // MODIFIES: this
     // EFFECTS: adds a cost to user's expenses, and adds this cost to allTransactions
-    public void addCost(Category category, String description, double amount) {
-        expenses.addCost(category, description, amount);
-        addToAllTransactions(new Cost(category, description, amount));
+    public void addCost(Category category, String description, double amount) throws NegativeAmountException,
+            NumberFormatException {
+        if (amount < 0) {
+            throw new NegativeAmountException();
+        } else {
+            expenses.addCost(category, description, amount);
+            addToAllTransactions(new Cost(category, description, amount));
+        }
     }
 
     // MODIFIES: this
     // EFFECTS: adds a fund to user's income, and adds this fund to allTransactions
-    public void addFund(Category category, String description, double amount) {
-        income.addFund(category, description, amount);
-        addToAllTransactions(new Fund(category, description, amount));
+    public void addFund(Category category, String description, double amount) throws NegativeAmountException,
+            NumberFormatException {
+        if (amount < 0) {
+            throw new NegativeAmountException();
+        } else {
+            income.addFund(category, description, amount);
+            addToAllTransactions(new Fund(category, description, amount));
+        }
     }
 
     // EFFECTS: adds transaction to allTransactions
@@ -77,7 +88,7 @@ public class User implements Writable {
 
     // EFFECTS: if specified transaction is in expenses or income, removes transaction from expenses or income, and if
     //          specified transaction is in allTransactions, removes transaction and returns true; else returns false
-    public boolean removeTransaction(Transaction transaction) {
+    public boolean removeTransaction(Transaction transaction) throws NumberFormatException {
         expenses.removeTransaction(transaction);
         income.removeTransaction(transaction);
         return allTransactions.removeTransaction(transaction);
