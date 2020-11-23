@@ -1,6 +1,9 @@
 package persistence;
 
-import model.*;
+import model.Category;
+import model.NegativeAmountException;
+import model.Transaction;
+import model.User;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

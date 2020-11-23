@@ -1,6 +1,8 @@
 package persistence;
 
-import model.*;
+import model.Category;
+import model.Transaction;
+import model.User;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -52,6 +54,24 @@ public class JsonReaderTest extends JsonTest {
             assertEquals(2, costs.size());
             checkFund(fc2,"Student loans", 2400.00, funds.get(0));
             checkFund(fc1,"Las Margs", 1222.75, funds.get(1));
+            checkCost(cc3,"Tuition", 3050, costs.get(0));
+            checkCost(cc1,"Rent", 850, costs.get(1));
+        } catch (IOException e) {
+            fail("Couldn't read from file");
+        }
+    }
+
+    @Test
+    void testReaderGeneralBudgetThrowNegativeAmountException() {
+        JsonReader reader = new JsonReader("./data/testReaderGeneralBudgetWithNegativeAmount.json");
+        try {
+            User user = reader.read();
+            assertEquals("Lucy", user.getName());
+            List<Transaction> funds = user.getIncome().getTransactions();
+            List<Transaction> costs = user.getExpenses().getTransactions();
+            assertEquals(1, funds.size());
+            assertEquals(2, costs.size());
+            checkFund(fc2,"Student loans", 2400.00, funds.get(0));
             checkCost(cc3,"Tuition", 3050, costs.get(0));
             checkCost(cc1,"Rent", 850, costs.get(1));
         } catch (IOException e) {

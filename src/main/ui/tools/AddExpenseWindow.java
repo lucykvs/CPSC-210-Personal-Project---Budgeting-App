@@ -1,6 +1,5 @@
 package ui.tools;
 
-import com.sun.org.apache.xpath.internal.operations.Neg;
 import model.Category;
 import model.NegativeAmountException;
 import ui.BudgetAppGUI;
