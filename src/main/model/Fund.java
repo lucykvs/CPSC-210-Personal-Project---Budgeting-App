@@ -2,7 +2,6 @@ package model;
 
 import persistence.Writable;
 
-
 // Represents a source of income having a category, description, amount, and type income
 public class Fund extends Transaction implements Writable {
 
