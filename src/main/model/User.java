@@ -57,7 +57,8 @@ public class User implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: adds a cost to user's expenses, and adds this cost to allTransactions
+    // EFFECTS: adds a cost to user's expenses, and adds this cost to allTransactions. If amount < 0, throws
+    //         NegativeAmountException. If amount is not a number, throws NumberFormatException.
     public void addCost(Category category, String description, double amount) throws NegativeAmountException,
             NumberFormatException {
         if (amount < 0) {
@@ -69,7 +70,8 @@ public class User implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: adds a fund to user's income, and adds this fund to allTransactions
+    // EFFECTS: adds a fund to user's income, and adds this fund to allTransactions. If amount < 0, throws
+    //          NegativeAmountException. If amount is not a number, throws NumberFormatException.
     public void addFund(Category category, String description, double amount) throws NegativeAmountException,
             NumberFormatException {
         if (amount < 0) {
@@ -86,7 +88,8 @@ public class User implements Writable {
     }
 
     // EFFECTS: if specified transaction is in expenses or income, removes transaction from expenses or income, and if
-    //          specified transaction is in allTransactions, removes transaction and returns true; else returns false
+    //          specified transaction is in allTransactions, removes transaction and returns true; else returns false.
+    //          If transaction amount is not a number, throws NumberFormatException.
     public boolean removeTransaction(Transaction transaction) throws NumberFormatException {
         expenses.removeTransaction(transaction);
         income.removeTransaction(transaction);

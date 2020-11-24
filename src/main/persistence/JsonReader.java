@@ -30,7 +30,8 @@ public class JsonReader {
         return parseUser(jsonObject);
     }
 
-    // EFFECTS: reads source file as string and returns it
+    // EFFECTS: reads source file as string and returns it;
+    // throws IOException if an error occurs reading data from file
     private String readFile(String source) throws IOException {
         StringBuilder contentBuilder = new StringBuilder();
 

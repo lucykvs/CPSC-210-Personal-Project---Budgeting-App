@@ -105,7 +105,8 @@ public abstract class TransactionWindow implements ActionListener {
         }
     }
 
-    // EFFECTS: gets details of transaction entered when add button is pressed
+    // EFFECTS: gets details of transaction entered when add button is pressed. If amount is negative, throws
+    //          NegativeAmountException; if amount is not a number, throws NumberFormatException.
     protected void getTransactionDetailsFromTransactionWindow(ActionEvent e) throws NumberFormatException,
             NegativeAmountException {
         if (e.getActionCommand().equals("Add") || e.getActionCommand().equals("Remove")) {

@@ -17,7 +17,9 @@ public class AddExpenseWindow extends TransactionWindow {
         initializePanelSetup(catOptions);
     }
 
-    // EFFECTS: when add button is clicked, gets expense details entered and adds expense
+    // EFFECTS: when add button is clicked, gets expense details entered and adds expense. If amount entered is not
+    //          a number, catches NumberFormatException and prints message to user; if amount is negative, catches
+    //          NegativeAmountException and prints appropriate message to user.
     @Override
     public void actionPerformed(ActionEvent e) {
         try {

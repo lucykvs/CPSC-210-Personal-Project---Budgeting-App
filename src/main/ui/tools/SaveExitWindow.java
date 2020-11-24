@@ -14,7 +14,6 @@ import java.io.FileNotFoundException;
 public class SaveExitWindow extends JFrame implements ActionListener {
     private static final String JSON_STORE = "./data/budget.json";
     private JsonWriter jsonWriter;
-    private JDialog saveExitPopup;
     protected BudgetAppGUI budgetAppGUI;
 
     // EFFECTS: constructs new save and exit window
