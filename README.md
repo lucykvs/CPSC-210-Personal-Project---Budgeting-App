@@ -1,5 +1,7 @@
 # CPSC 210 Personal Project
 
+Check out a demo [here](https://www.youtube.com/watch?v=-95utZrG1fg)!
+
 ## A budget organization app
 
 
